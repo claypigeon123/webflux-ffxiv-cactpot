@@ -1,0 +1,54 @@
+server:
+    port: 10900
+spring:
+    application:
+        name: mini-cactpot-service
+    main:
+        web-application-type: reactive
+        allow-bean-definition-overriding: true
+    couchbase:
+        connection-string: localhost
+        username: user
+        password: password
+    data:
+        couchbase:
+            bucket-name: mini-cactpot-aggregates
+            repositories:
+                type: reactive
+application:
+    security:
+        allowed-origins:
+            - http://localhost:3000
+            - http://localhost:5000
+        allowed-methods:
+            - GET
+            - POST
+            - PUT
+            - DELETE
+            - OPTIONS
+        allow-credentials: true
+        allowed-headers:
+            - Content-Type
+        exposed-headers:
+            - Content-Type
+mini-cactpot:
+    winnings-map:
+        6: 10000
+        7: 36
+        8: 720
+        9: 360
+        10: 80
+        11: 252
+        12: 108
+        13: 72
+        14: 54
+        15: 180
+        16: 72
+        17: 180
+        18: 119
+        19: 36
+        20: 306
+        21: 1080
+        22: 144
+        23: 1800
+        24: 3600

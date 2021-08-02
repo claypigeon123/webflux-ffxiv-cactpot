@@ -1,0 +1,30 @@
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
+body {
+    font-family: 'Poppins', sans-serif !important;
+    background-color: rgb(27, 29, 31);
+    color: rgb(238, 238, 238);
+}
+
+.node {
+    font-family: consolas;
+    border: 1px solid white;
+    transition: all 160ms;
+}
+
+.node-revealed {
+    background-color: rgb(214, 194, 141);
+    color: rgb(50, 50, 50);
+    cursor: default;
+}
+
+.node-hidden {
+    background-color: rgb(95, 89, 75);
+    color: rgb(95, 89, 75);
+    cursor: pointer;
+}
+
+.node-hidden:hover {
+    background-color: rgb(143, 134, 114);
+    color: rgb(143, 134, 114);
+}
