@@ -11,8 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -38,7 +40,16 @@ public class MiniCactpotController {
         return miniCactpotService.getWinningsMap();
     }
 
-    @GetMapping("/ticket/{id}")
+    @GetMapping("/tickets")
+    @ResponseStatus(HttpStatus.OK)
+    public Flux<GetMiniCactpotTicketResponse> queryTickets(
+        @RequestParam(required = false) MultiValueMap<String, String> queryParams
+    ) {
+        log.info("Request to query mini cactpot tickets by {}", queryParams);
+        return miniCactpotService.queryTickets(queryParams);
+    }
+
+    @GetMapping("/tickets/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Mono<GetMiniCactpotTicketResponse> getTicket(
         @PathVariable UUID id

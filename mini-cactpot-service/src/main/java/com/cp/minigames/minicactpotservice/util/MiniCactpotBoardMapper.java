@@ -1,8 +1,6 @@
 package com.cp.minigames.minicactpotservice.util;
 
-import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotBoard;
 import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotNode;
-import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotPublicBoard;
 import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotPublicNode;
 import org.springframework.stereotype.Component;
 
@@ -12,10 +10,10 @@ import java.util.List;
 @Component
 public class MiniCactpotBoardMapper {
 
-    public MiniCactpotPublicBoard mapPrivateBoardToPublic(MiniCactpotBoard board) {
+    public List<MiniCactpotPublicNode> mapPrivateBoardToPublic(List<MiniCactpotNode> board) {
         List<MiniCactpotPublicNode> publicNodes = new ArrayList<>();
 
-        for (MiniCactpotNode node : board.getBoard()) {
+        for (MiniCactpotNode node : board) {
             int number;
             if (node.getIsRevealed()) {
                 number = node.getNumber();
@@ -28,8 +26,6 @@ public class MiniCactpotBoardMapper {
             );
         }
 
-        return MiniCactpotPublicBoard.builder()
-            .board(publicNodes)
-            .build();
+        return publicNodes;
     }
 }

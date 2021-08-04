@@ -1,3 +1,4 @@
+
 server:
     port: 10900
 spring:
@@ -31,6 +32,8 @@ application:
             - Content-Type
         exposed-headers:
             - Content-Type
+    cron:
+        aggregate-cleanup-cron: 0 0 * ? * *
 mini-cactpot:
     winnings-map:
         6: 10000

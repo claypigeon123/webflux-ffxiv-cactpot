@@ -1,7 +1,7 @@
 package com.cp.minigames.minicactpotservice.model.aggregate;
 
-import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotBoard;
-import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotPublicBoard;
+import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotNode;
+import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotPublicNode;
 import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotSelection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +12,7 @@ import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.GenerationStrategy;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -34,9 +35,7 @@ public class MiniCactpotAggregate {
 
     private MiniCactpotSelection selection;
 
-    private MiniCactpotBoard board;
-
-    private MiniCactpotPublicBoard publicBoard;
+    private List<MiniCactpotNode> board;
 
     private String createdDate;
 }

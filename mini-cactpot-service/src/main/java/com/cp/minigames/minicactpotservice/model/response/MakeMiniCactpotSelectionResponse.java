@@ -1,11 +1,12 @@
 package com.cp.minigames.minicactpotservice.model.response;
 
-import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotPublicBoard;
+import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotPublicNode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -14,6 +15,6 @@ import java.util.UUID;
 @Builder
 public class MakeMiniCactpotSelectionResponse {
     private UUID id;
-    private MiniCactpotPublicBoard board;
+    private List<MiniCactpotPublicNode> board;
     private Integer winnings;
 }
