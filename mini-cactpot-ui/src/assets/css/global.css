@@ -8,8 +8,8 @@ body {
 
 .node {
     font-family: consolas;
-    border: 1px solid white;
-    transition: all 160ms;
+    border: 2px solid white;
+    transition: all 120ms;
 }
 
 .node-revealed {
@@ -27,4 +27,24 @@ body {
 .node-hidden:hover {
     background-color: rgb(143, 134, 114);
     color: rgb(143, 134, 114);
+}
+
+.node-selected {
+    background-color: rgb(255, 251, 0);
+    color: rgb(50, 50, 50);
+    border: 2px solid rgb(66, 0, 0);
+    cursor: default;
+}
+
+.selection {
+    background-color: rgb(38, 46, 58);
+}
+
+.selection:hover {
+    background-color: rgb(59, 74, 97);
+    cursor: pointer;
+}
+
+.selection-hidden {
+    visibility: hidden;
 }

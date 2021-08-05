@@ -13,12 +13,15 @@ export const GameComponent = () => {
     const [gameId, setGameId] = useState(undefined);
     const [board, setBoard] = useState({});
     const [nScratch, setNScratch] = useState(0);
+    const [winnings, setWinnings] = useState(0);
 
     const startGame = () => {
         axios.post("/api/mini-cactpot/start-new-game").then(res => {
             setGameId(res.data["id"]);
-            setBoard(res.data["board"]["board"]);
+            setBoard(res.data["board"]);
             setGameStarted(true);
+        }).catch(err => {
+            console.log(err.response?.data);
         });
     }
 
@@ -27,12 +30,25 @@ export const GameComponent = () => {
             id: gameId,
             position: index + 1
         };
-        axios.post("/api/mini-cactpot/scratch", data, {headers: { "Content-Type": "application/json" }}).then(res => {
-            setBoard(res.data["board"]["board"]);
+        axios.post("/api/mini-cactpot/scratch", data).then(res => {
+            setBoard(res.data["board"]);
             setNScratch(nScratch + 1);
         }).catch(err => {
             console.log(err.response?.data);
-        })
+        });
+    }
+
+    const makeSelection = (selection) => {
+        const data = {
+            id: gameId,
+            selection: selection
+        };
+        axios.post("/api/mini-cactpot/make-selection", data).then(res => {
+            setBoard(res.data["board"]);
+            setWinnings(res.data.winnings);
+        }).catch(err => {
+            console.log(err.response?.data);
+        });
     }
 
     const renderGame = () => {
@@ -42,7 +58,7 @@ export const GameComponent = () => {
             );
         }
 
-        return <MiniCactpotDisplay board={board} scratch={scratch} canScratch={nScratch < 3} />
+        return <MiniCactpotDisplay board={board} scratch={scratch} canScratch={nScratch < 3} makeSelection={makeSelection} />
     }
 
     return (
