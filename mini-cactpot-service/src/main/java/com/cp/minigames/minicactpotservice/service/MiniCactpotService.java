@@ -21,6 +21,7 @@ import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -32,19 +33,22 @@ public class MiniCactpotService {
     private final MiniCactpotBoardMapper miniCactpotBoardMapper;
     private final RandomNumberGenerator rng;
     private final DateTimeFormatter dtf;
+    private final Clock clock;
 
     public MiniCactpotService(
         MiniCactpotAggregateRepository miniCactpotAggregateRepository,
         MiniCactpotProperties miniCactpotProperties,
         MiniCactpotBoardMapper miniCactpotBoardMapper,
         RandomNumberGenerator rng,
-        DateTimeFormatter dtf
+        DateTimeFormatter dtf,
+        Clock clock
     ) {
         this.miniCactpotAggregateRepository = miniCactpotAggregateRepository;
         this.miniCactpotProperties = miniCactpotProperties;
         this.miniCactpotBoardMapper = miniCactpotBoardMapper;
         this.rng = rng;
         this.dtf = dtf;
+        this.clock = clock;
     }
 
     public Mono<Map<Integer, Integer>> getWinningsMap() {
@@ -53,7 +57,7 @@ public class MiniCactpotService {
 
     public Flux<GetMiniCactpotTicketResponse> queryTickets(MultiValueMap<String, String> queryParams) {
         return miniCactpotAggregateRepository
-            .query(queryParams)
+            .query(queryParams.toSingleValueMap())
             .map(saved -> GetMiniCactpotTicketResponse.builder()
                 .id(saved.getId())
                 .board(miniCactpotBoardMapper.mapPrivateBoardToPublic(saved.getBoard()))
@@ -125,7 +129,7 @@ public class MiniCactpotService {
             .canSelect(false)
             .isDone(false)
             .winnings(null)
-            .createdDate(OffsetDateTime.now().format(dtf))
+            .createdDate(OffsetDateTime.now(clock).format(dtf))
             .build()
         );
     }

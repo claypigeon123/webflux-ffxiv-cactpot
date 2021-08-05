@@ -32,8 +32,9 @@ application:
             - Content-Type
         exposed-headers:
             - Content-Type
-    cron:
+    cleanup:
         aggregate-cleanup-cron: 0 0 * ? * *
+        cutoff-hours: 24
 mini-cactpot:
     winnings-map:
         6: 10000

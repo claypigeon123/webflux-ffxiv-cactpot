@@ -26,8 +26,7 @@ public class MiniCactpotAggregateRepository implements ReactiveRepository<MiniCa
     }
 
     @Override
-    public Flux<MiniCactpotAggregate> query(MultiValueMap<String, String> queryParams) {
-        Map<String, String> params = queryParams.toSingleValueMap();
+    public Flux<MiniCactpotAggregate> query(Map<String, String> params) {
         String createdDateFrom = params.get("createdDate.from");
         String createdDateTo = params.get("createdDate.to");
         String isDone = params.get("isDone");
