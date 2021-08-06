@@ -2,14 +2,14 @@ package com.cp.minigames.minicactpotservice.util;
 
 import org.springframework.stereotype.Component;
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 @Component
 public class RandomNumberGenerator {
-    private final Random rnd;
+    private final SecureRandom rnd;
 
     public RandomNumberGenerator() {
-        this.rnd = new Random();
+        this.rnd = new SecureRandom();
     }
 
     public int generate(int min, int max) {

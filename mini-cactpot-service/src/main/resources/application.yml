@@ -33,7 +33,7 @@ application:
         exposed-headers:
             - Content-Type
     cleanup:
-        aggregate-cleanup-cron: 0 0 * ? * *
+        aggregate-cleanup-cron: 0 * * ? * *
         cutoff-hours: 24
 mini-cactpot:
     winnings-map:

@@ -1,5 +1,6 @@
 package com.cp.minigames.minicactpotservice.model.response;
 
+import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotGameStage;
 import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotPublicNode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,9 +16,8 @@ import java.util.UUID;
 @Builder
 public class GetMiniCactpotTicketResponse {
     private UUID id;
-    private List<MiniCactpotPublicNode> board;
-    private Integer nScratched;
-    private Boolean isDone;
-    private Integer winnings;
     private String createdDate;
+    private MiniCactpotGameStage stage;
+    private Integer winnings;
+    private List<MiniCactpotPublicNode> board;
 }

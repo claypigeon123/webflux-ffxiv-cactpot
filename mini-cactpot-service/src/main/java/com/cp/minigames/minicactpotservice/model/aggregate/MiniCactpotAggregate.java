@@ -1,5 +1,6 @@
 package com.cp.minigames.minicactpotservice.model.aggregate;
 
+import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotGameStage;
 import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotNode;
 import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotPublicNode;
 import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotSelection;
@@ -25,17 +26,13 @@ public class MiniCactpotAggregate {
     @GeneratedValue(strategy = GenerationStrategy.UNIQUE)
     private UUID id;
 
-    private Integer nScratched;
+    private String createdDate;
 
-    private Boolean canSelect;
-
-    private Boolean isDone;
+    private MiniCactpotGameStage stage;
 
     private Integer winnings;
 
     private MiniCactpotSelection selection;
 
     private List<MiniCactpotNode> board;
-
-    private String createdDate;
 }

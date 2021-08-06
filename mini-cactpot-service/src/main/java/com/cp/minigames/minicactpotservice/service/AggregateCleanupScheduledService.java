@@ -1,8 +1,8 @@
 package com.cp.minigames.minicactpotservice.service;
 
-import com.cp.minigames.minicactpotservice.config.model.CleanupProperties;
+import com.cp.minigames.minicactpotservice.config.properties.CleanupProperties;
 import com.cp.minigames.minicactpotservice.model.aggregate.MiniCactpotAggregate;
-import com.cp.minigames.minicactpotservice.repository.MiniCactpotAggregateRepository;
+import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotGameStage;
 import com.cp.minigames.minicactpotservice.repository.base.ReactiveRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,15 +10,15 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import reactor.core.publisher.Mono;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collector;
 
 @Service
 @EnableAsync
@@ -43,9 +43,10 @@ public class AggregateCleanupScheduledService {
         log.info("Starting mini cactpot aggregate cleanup job");
         OffsetDateTime cutoff = OffsetDateTime.now(clock).minusHours(cleanupProperties.getCutoffHours());
 
-        miniCactpotAggregateRepository.query(Map.of(
-            "createdDate.to", cutoff.format(dtf),
-            "isDone", "false"))
+        miniCactpotAggregateRepository.query(new LinkedMultiValueMap<>(Map.of(
+            "createdDate.to", List.of(cutoff.format(dtf)),
+            "stage.not", List.of("DONE")
+        )))
             .map(MiniCactpotAggregate::getId)
             .flatMap(id -> miniCactpotAggregateRepository.delete(id).thenReturn(1))
             .reduce(0, Integer::sum)

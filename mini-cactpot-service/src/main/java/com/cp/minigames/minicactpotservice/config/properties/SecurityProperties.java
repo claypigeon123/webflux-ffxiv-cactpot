@@ -1,4 +1,4 @@
-package com.cp.minigames.minicactpotservice.config.model;
+package com.cp.minigames.minicactpotservice.config.properties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,10 +1,10 @@
 package com.cp.minigames.minicactpotservice.service;
 
-import com.cp.minigames.minicactpotservice.config.model.MiniCactpotProperties;
+import com.cp.minigames.minicactpotservice.config.properties.MiniCactpotProperties;
 import com.cp.minigames.minicactpotservice.exception.MiniCactpotGameException;
 import com.cp.minigames.minicactpotservice.model.aggregate.MiniCactpotAggregate;
+import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotGameStage;
 import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotNode;
-import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotPublicNode;
 import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotSelection;
 import com.cp.minigames.minicactpotservice.model.request.MakeMiniCactpotSelectionRequest;
 import com.cp.minigames.minicactpotservice.model.request.ScratchMiniCactpotNodeRequest;
@@ -57,13 +57,12 @@ public class MiniCactpotService {
 
     public Flux<GetMiniCactpotTicketResponse> queryTickets(MultiValueMap<String, String> queryParams) {
         return miniCactpotAggregateRepository
-            .query(queryParams.toSingleValueMap())
+            .query(queryParams)
             .map(saved -> GetMiniCactpotTicketResponse.builder()
                 .id(saved.getId())
                 .board(miniCactpotBoardMapper.mapPrivateBoardToPublic(saved.getBoard()))
                 .winnings(saved.getWinnings())
-                .isDone(saved.getIsDone())
-                .nScratched(saved.getNScratched())
+                .stage(saved.getStage())
                 .createdDate(saved.getCreatedDate())
                 .build()
             );
@@ -75,8 +74,7 @@ public class MiniCactpotService {
                 .id(saved.getId())
                 .board(miniCactpotBoardMapper.mapPrivateBoardToPublic(saved.getBoard()))
                 .winnings(saved.getWinnings())
-                .isDone(saved.getIsDone())
-                .nScratched(saved.getNScratched())
+                .stage(saved.getStage())
                 .createdDate(saved.getCreatedDate())
                 .build()
             );
@@ -88,28 +86,31 @@ public class MiniCactpotService {
             .map(saved -> StartMiniCactpotGameResponse.builder()
                 .id(saved.getId())
                 .board(miniCactpotBoardMapper.mapPrivateBoardToPublic(saved.getBoard()))
+                .stage(saved.getStage())
                 .build()
             );
     }
 
-    public Mono<ScratchMiniCactpotNodeResponse> scratch(ScratchMiniCactpotNodeRequest request) {
-        return fetchGameBoard(request.getId())
+    public Mono<ScratchMiniCactpotNodeResponse> scratch(UUID id, ScratchMiniCactpotNodeRequest request) {
+        return fetchGameBoard(id)
             .map(aggregate -> scratchMiniCactpotTicket(aggregate, request.getPosition()))
             .flatMap(miniCactpotAggregateRepository::upsert)
             .map(saved -> ScratchMiniCactpotNodeResponse.builder()
                 .id(saved.getId())
                 .board(miniCactpotBoardMapper.mapPrivateBoardToPublic(saved.getBoard()))
+                .stage(saved.getStage())
                 .build()
             );
     }
 
-    public Mono<MakeMiniCactpotSelectionResponse> makeSelection(MakeMiniCactpotSelectionRequest request) {
-        return fetchGameBoard(request.getId())
+    public Mono<MakeMiniCactpotSelectionResponse> makeSelection(UUID id, MakeMiniCactpotSelectionRequest request) {
+        return fetchGameBoard(id)
             .map(aggregate -> makeFinalSelection(aggregate, request.getSelection()))
             .flatMap(miniCactpotAggregateRepository::upsert)
             .map(saved -> MakeMiniCactpotSelectionResponse.builder()
                 .id(saved.getId())
                 .board(miniCactpotBoardMapper.mapPrivateBoardToPublic(saved.getBoard()))
+                .stage(saved.getStage())
                 .winnings(saved.getWinnings())
                 .build()
             );
@@ -124,10 +125,8 @@ public class MiniCactpotService {
         List<MiniCactpotNode> board = initializeNodes();
         return Mono.just(MiniCactpotAggregate.builder()
             .board(board)
-            .nScratched(0)
             .selection(MiniCactpotSelection.NONE)
-            .canSelect(false)
-            .isDone(false)
+            .stage(MiniCactpotGameStage.SCRATCHING_FIRST)
             .winnings(null)
             .createdDate(OffsetDateTime.now(clock).format(dtf))
             .build()
@@ -159,11 +158,12 @@ public class MiniCactpotService {
     }
 
     private MiniCactpotAggregate scratchMiniCactpotTicket(MiniCactpotAggregate miniCactpotAggregate, Integer position) {
-        if (miniCactpotAggregate.getIsDone()) {
+        MiniCactpotGameStage stage = miniCactpotAggregate.getStage();
+        if (stage == MiniCactpotGameStage.DONE) {
             throw new MiniCactpotGameException("The given mini cactpot ticket has already been completed");
         }
 
-        if (miniCactpotAggregate.getNScratched() >= 3) {
+        if (stage == MiniCactpotGameStage.SELECTING) {
             throw new MiniCactpotGameException("Cannot scrach any more fields on the given ticket");
         }
 
@@ -174,19 +174,17 @@ public class MiniCactpotService {
 
         node.setIsRevealed(true);
         miniCactpotAggregate.getBoard().set(position - 1, node);
-        miniCactpotAggregate.setNScratched(miniCactpotAggregate.getNScratched() + 1);
-        if (miniCactpotAggregate.getNScratched() == 3) {
-            miniCactpotAggregate.setCanSelect(true);
-        }
+        miniCactpotAggregate.setStage(stage.advance());
         return miniCactpotAggregate;
     }
 
     private MiniCactpotAggregate makeFinalSelection(MiniCactpotAggregate miniCactpotAggregate, MiniCactpotSelection selection) {
-        if (miniCactpotAggregate.getIsDone()) {
+        MiniCactpotGameStage stage = miniCactpotAggregate.getStage();
+        if (stage == MiniCactpotGameStage.DONE) {
             throw new MiniCactpotGameException("The given mini cactpot ticket has already been completed");
         }
 
-        if (!miniCactpotAggregate.getCanSelect() || miniCactpotAggregate.getNScratched() != 3) {
+        if (stage != MiniCactpotGameStage.SELECTING) {
             throw new MiniCactpotGameException("Cannot make a selection on the given ticket yet");
         }
 
@@ -203,8 +201,7 @@ public class MiniCactpotService {
 
         int winnings = miniCactpotProperties.getWinningsMap().get(sum);
 
-        miniCactpotAggregate.setCanSelect(false);
-        miniCactpotAggregate.setIsDone(true);
+        miniCactpotAggregate.setStage(stage.advance());
         miniCactpotAggregate.setSelection(selection);
         miniCactpotAggregate.setWinnings(winnings);
         return miniCactpotAggregate;

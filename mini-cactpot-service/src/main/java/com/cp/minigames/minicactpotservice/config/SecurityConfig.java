@@ -1,7 +1,7 @@
 package com.cp.minigames.minicactpotservice.config;
 
 
-import com.cp.minigames.minicactpotservice.config.model.SecurityProperties;
+import com.cp.minigames.minicactpotservice.config.properties.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
