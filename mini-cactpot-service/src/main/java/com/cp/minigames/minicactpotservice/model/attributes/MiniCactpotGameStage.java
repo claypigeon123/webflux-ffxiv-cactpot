@@ -13,13 +13,9 @@ public enum MiniCactpotGameStage {
 
     private final int index;
 
-    public int getIndex() {
-        return index;
-    }
-
     public MiniCactpotGameStage advance() {
-        int current = getIndex();
-        if (current == DONE.getIndex()) {
+        int current = index;
+        if (current == DONE.index) {
             return this;
         }
 
