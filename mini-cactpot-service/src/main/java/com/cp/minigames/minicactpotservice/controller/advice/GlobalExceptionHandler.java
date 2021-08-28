@@ -1,6 +1,6 @@
 package com.cp.minigames.minicactpotservice.controller.advice;
 
-import com.cp.minigames.minicactpotservice.exception.MiniCactpotGameException;
+import com.cp.minigames.minicactpotservice.exception.base.MiniCactpotGameException;
 import com.cp.minigames.minicactpotservice.model.error.MiniCactpotError;
 import com.cp.minigames.minicactpotservice.model.error.MiniCactpotFieldError;
 import org.springframework.http.HttpStatus;

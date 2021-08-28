@@ -2,7 +2,6 @@ package com.cp.minigames.minicactpotservice.model.aggregate;
 
 import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotGameStage;
 import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotNode;
-import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotPublicNode;
 import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotSelection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

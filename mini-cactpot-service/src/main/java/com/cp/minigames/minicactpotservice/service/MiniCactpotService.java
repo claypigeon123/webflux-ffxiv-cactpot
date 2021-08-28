@@ -1,7 +1,7 @@
 package com.cp.minigames.minicactpotservice.service;
 
 import com.cp.minigames.minicactpotservice.config.properties.MiniCactpotProperties;
-import com.cp.minigames.minicactpotservice.exception.MiniCactpotGameException;
+import com.cp.minigames.minicactpotservice.exception.*;
 import com.cp.minigames.minicactpotservice.model.aggregate.MiniCactpotAggregate;
 import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotGameStage;
 import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotNode;
@@ -154,22 +154,22 @@ public class MiniCactpotService {
     private Mono<MiniCactpotAggregate> fetchGameBoard(UUID id) {
         return miniCactpotAggregateRepository
             .findById(id)
-            .switchIfEmpty(Mono.error(new MiniCactpotGameException("Mini cactpot ticket with ID " + id + " not found")));
+            .switchIfEmpty(Mono.error(new TicketNotFoundException(id.toString())));
     }
 
     private MiniCactpotAggregate scratchMiniCactpotTicket(MiniCactpotAggregate miniCactpotAggregate, Integer position) {
         MiniCactpotGameStage stage = miniCactpotAggregate.getStage();
         if (stage == MiniCactpotGameStage.DONE) {
-            throw new MiniCactpotGameException("The given mini cactpot ticket has already been completed");
+            throw new TicketAlreadyCompleteException();
         }
 
         if (stage == MiniCactpotGameStage.SELECTING) {
-            throw new MiniCactpotGameException("Cannot scrach any more fields on the given ticket");
+            throw new CannotScratchException();
         }
 
         MiniCactpotNode node = miniCactpotAggregate.getBoard().get(position - 1);
         if (node.getIsRevealed()) {
-            throw new MiniCactpotGameException("The given field is already revealed on the given ticket");
+            throw new FieldAlreadyRevealedException();
         }
 
         node.setIsRevealed(true);
@@ -181,11 +181,11 @@ public class MiniCactpotService {
     private MiniCactpotAggregate makeFinalSelection(MiniCactpotAggregate miniCactpotAggregate, MiniCactpotSelection selection) {
         MiniCactpotGameStage stage = miniCactpotAggregate.getStage();
         if (stage == MiniCactpotGameStage.DONE) {
-            throw new MiniCactpotGameException("The given mini cactpot ticket has already been completed");
+            throw new TicketAlreadyCompleteException();
         }
 
         if (stage != MiniCactpotGameStage.SELECTING) {
-            throw new MiniCactpotGameException("Cannot make a selection on the given ticket yet");
+            throw new CannotMakeSelectionException();
         }
 
         // Setting every node to be revealed

@@ -1,4 +1,4 @@
-package com.cp.minigames.minicactpotservice.exception;
+package com.cp.minigames.minicactpotservice.exception.base;
 
 public class MiniCactpotGameException extends RuntimeException {
     public MiniCactpotGameException() {
