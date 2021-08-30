@@ -1,9 +1,10 @@
 package com.cp.minigames.minicactpotservice.service;
 
 import com.cp.minigames.minicactpotservice.config.properties.CleanupProperties;
-import com.cp.minigames.minicactpotservice.model.aggregate.MiniCactpotAggregate;
-import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotGameStage;
-import com.cp.minigames.minicactpotservice.model.util.MiniCactpotAggregateProperty;
+import com.cp.minigames.minicactpot.domain.model.aggregate.MiniCactpotAggregate;
+import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotGameStage;
+import com.cp.minigames.minicactpot.domain.model.util.MiniCactpotAggregateProperty;
+import com.cp.minigames.minicactpotservice.repository.MiniCactpotAggregateRepository;
 import com.cp.minigames.minicactpotservice.repository.base.ReactiveRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,19 +19,23 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 @EnableAsync
 public class AggregateCleanupScheduledService {
     private final Logger log = LoggerFactory.getLogger(AggregateCleanupScheduledService.class);
 
-    private final ReactiveRepository<MiniCactpotAggregate, UUID> miniCactpotAggregateRepository;
+    private final ReactiveRepository<MiniCactpotAggregate, String> miniCactpotAggregateRepository;
     private final CleanupProperties cleanupProperties;
     private final Clock clock;
     private final DateTimeFormatter dtf;
 
-    public AggregateCleanupScheduledService(ReactiveRepository<MiniCactpotAggregate, UUID> miniCactpotAggregateRepository, CleanupProperties cleanupProperties, Clock clock, DateTimeFormatter dtf) {
+    public AggregateCleanupScheduledService(
+        MiniCactpotAggregateRepository miniCactpotAggregateRepository,
+        CleanupProperties cleanupProperties,
+        Clock clock,
+        DateTimeFormatter dtf
+    ) {
         this.miniCactpotAggregateRepository = miniCactpotAggregateRepository;
         this.cleanupProperties = cleanupProperties;
         this.clock = clock;

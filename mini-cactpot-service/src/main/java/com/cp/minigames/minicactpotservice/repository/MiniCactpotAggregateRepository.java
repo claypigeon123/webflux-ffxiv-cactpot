@@ -1,7 +1,7 @@
 package com.cp.minigames.minicactpotservice.repository;
 
-import com.cp.minigames.minicactpotservice.model.aggregate.MiniCactpotAggregate;
-import com.cp.minigames.minicactpotservice.model.util.MiniCactpotAggregateProperty;
+import com.cp.minigames.minicactpot.domain.model.aggregate.MiniCactpotAggregate;
+import com.cp.minigames.minicactpot.domain.model.util.MiniCactpotAggregateProperty;
 import com.cp.minigames.minicactpotservice.repository.base.ReactiveRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +15,9 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
-public class MiniCactpotAggregateRepository implements ReactiveRepository<MiniCactpotAggregate, UUID> {
+public class MiniCactpotAggregateRepository implements ReactiveRepository<MiniCactpotAggregate, String> {
 
     private static final int MULTI_LIST_LIMIT = 5;
 
@@ -60,9 +59,9 @@ public class MiniCactpotAggregateRepository implements ReactiveRepository<MiniCa
     }
 
     @Override
-    public Mono<MiniCactpotAggregate> findById(UUID uuid) {
+    public Mono<MiniCactpotAggregate> findById(String id) {
         return template.findById(MiniCactpotAggregate.class)
-            .one(uuid.toString());
+            .one(id);
     }
 
     @Override
@@ -72,9 +71,9 @@ public class MiniCactpotAggregateRepository implements ReactiveRepository<MiniCa
     }
 
     @Override
-    public Mono<Void> delete(UUID uuid) {
+    public Mono<Void> delete(String id) {
         return template.removeById()
-            .one(uuid.toString())
+            .one(id)
             .then();
     }
 }

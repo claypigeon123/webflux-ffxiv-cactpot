@@ -1,17 +1,17 @@
 package com.cp.minigames.minicactpotservice.service;
 
+import com.cp.minigames.minicactpot.domain.exception.*;
 import com.cp.minigames.minicactpotservice.config.properties.MiniCactpotProperties;
-import com.cp.minigames.minicactpotservice.exception.*;
-import com.cp.minigames.minicactpotservice.model.aggregate.MiniCactpotAggregate;
-import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotGameStage;
-import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotNode;
-import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotSelection;
-import com.cp.minigames.minicactpotservice.model.request.MakeMiniCactpotSelectionRequest;
-import com.cp.minigames.minicactpotservice.model.request.ScratchMiniCactpotNodeRequest;
-import com.cp.minigames.minicactpotservice.model.response.GetMiniCactpotTicketResponse;
-import com.cp.minigames.minicactpotservice.model.response.MakeMiniCactpotSelectionResponse;
-import com.cp.minigames.minicactpotservice.model.response.ScratchMiniCactpotNodeResponse;
-import com.cp.minigames.minicactpotservice.model.response.StartMiniCactpotGameResponse;
+import com.cp.minigames.minicactpot.domain.model.aggregate.MiniCactpotAggregate;
+import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotGameStage;
+import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotNode;
+import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotSelection;
+import com.cp.minigames.minicactpot.domain.model.request.MakeMiniCactpotSelectionRequest;
+import com.cp.minigames.minicactpot.domain.model.request.ScratchMiniCactpotNodeRequest;
+import com.cp.minigames.minicactpot.domain.model.response.GetMiniCactpotTicketResponse;
+import com.cp.minigames.minicactpot.domain.model.response.MakeMiniCactpotSelectionResponse;
+import com.cp.minigames.minicactpot.domain.model.response.ScratchMiniCactpotNodeResponse;
+import com.cp.minigames.minicactpot.domain.model.response.StartMiniCactpotGameResponse;
 import com.cp.minigames.minicactpotservice.repository.MiniCactpotAggregateRepository;
 import com.cp.minigames.minicactpotservice.repository.base.ReactiveRepository;
 import com.cp.minigames.minicactpotservice.util.MiniCactpotBoardMapper;
@@ -28,7 +28,7 @@ import java.util.*;
 
 @Service
 public class MiniCactpotService {
-    private final ReactiveRepository<MiniCactpotAggregate, UUID> miniCactpotAggregateRepository;
+    private final ReactiveRepository<MiniCactpotAggregate, String> miniCactpotAggregateRepository;
     private final MiniCactpotProperties miniCactpotProperties;
     private final MiniCactpotBoardMapper miniCactpotBoardMapper;
     private final RandomNumberGenerator rng;
@@ -68,7 +68,7 @@ public class MiniCactpotService {
             );
     }
 
-    public Mono<GetMiniCactpotTicketResponse> getTicket(UUID id) {
+    public Mono<GetMiniCactpotTicketResponse> getTicket(String id) {
         return fetchGameBoard(id)
             .map(saved -> GetMiniCactpotTicketResponse.builder()
                 .id(saved.getId())
@@ -91,7 +91,7 @@ public class MiniCactpotService {
             );
     }
 
-    public Mono<ScratchMiniCactpotNodeResponse> scratch(UUID id, ScratchMiniCactpotNodeRequest request) {
+    public Mono<ScratchMiniCactpotNodeResponse> scratch(String id, ScratchMiniCactpotNodeRequest request) {
         return fetchGameBoard(id)
             .map(aggregate -> scratchMiniCactpotTicket(aggregate, request.getPosition()))
             .flatMap(miniCactpotAggregateRepository::upsert)
@@ -103,7 +103,7 @@ public class MiniCactpotService {
             );
     }
 
-    public Mono<MakeMiniCactpotSelectionResponse> makeSelection(UUID id, MakeMiniCactpotSelectionRequest request) {
+    public Mono<MakeMiniCactpotSelectionResponse> makeSelection(String id, MakeMiniCactpotSelectionRequest request) {
         return fetchGameBoard(id)
             .map(aggregate -> makeFinalSelection(aggregate, request.getSelection()))
             .flatMap(miniCactpotAggregateRepository::upsert)
@@ -124,6 +124,7 @@ public class MiniCactpotService {
     private Mono<MiniCactpotAggregate> initializeNewGame() {
         List<MiniCactpotNode> board = initializeNodes();
         return Mono.just(MiniCactpotAggregate.builder()
+            .id(UUID.randomUUID().toString())
             .board(board)
             .selection(MiniCactpotSelection.NONE)
             .stage(MiniCactpotGameStage.SCRATCHING_FIRST)
@@ -151,10 +152,10 @@ public class MiniCactpotService {
         return nodes;
     }
 
-    private Mono<MiniCactpotAggregate> fetchGameBoard(UUID id) {
+    private Mono<MiniCactpotAggregate> fetchGameBoard(String id) {
         return miniCactpotAggregateRepository
             .findById(id)
-            .switchIfEmpty(Mono.error(new TicketNotFoundException(id.toString())));
+            .switchIfEmpty(Mono.error(new TicketNotFoundException(id)));
     }
 
     private MiniCactpotAggregate scratchMiniCactpotTicket(MiniCactpotAggregate miniCactpotAggregate, Integer position) {

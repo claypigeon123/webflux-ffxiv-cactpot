@@ -1,27 +1,24 @@
 package com.cp.minigames.minicactpotservice.controller;
 
-import com.cp.minigames.minicactpotservice.model.request.MakeMiniCactpotSelectionRequest;
-import com.cp.minigames.minicactpotservice.model.request.ScratchMiniCactpotNodeRequest;
-import com.cp.minigames.minicactpotservice.model.response.GetMiniCactpotTicketResponse;
-import com.cp.minigames.minicactpotservice.model.response.MakeMiniCactpotSelectionResponse;
-import com.cp.minigames.minicactpotservice.model.response.ScratchMiniCactpotNodeResponse;
-import com.cp.minigames.minicactpotservice.model.response.StartMiniCactpotGameResponse;
+import com.cp.minigames.minicactpot.domain.model.request.MakeMiniCactpotSelectionRequest;
+import com.cp.minigames.minicactpot.domain.model.request.ScratchMiniCactpotNodeRequest;
+import com.cp.minigames.minicactpot.domain.model.response.GetMiniCactpotTicketResponse;
+import com.cp.minigames.minicactpot.domain.model.response.MakeMiniCactpotSelectionResponse;
+import com.cp.minigames.minicactpot.domain.model.response.ScratchMiniCactpotNodeResponse;
+import com.cp.minigames.minicactpot.domain.model.response.StartMiniCactpotGameResponse;
 import com.cp.minigames.minicactpotservice.service.MiniCactpotService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import java.util.Map;
-import java.util.UUID;
 
 @Validated
 @RestController
@@ -51,7 +48,7 @@ public class MiniCactpotController {
 
     @GetMapping("/tickets/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<GetMiniCactpotTicketResponse> getTicket(@PathVariable UUID id) {
+    public Mono<GetMiniCactpotTicketResponse> getTicket(@PathVariable String id) {
         log.info("Request to retrieve mini cactpot ticket by id {}", id);
         return miniCactpotService.getTicket(id);
     }
@@ -66,7 +63,7 @@ public class MiniCactpotController {
     @PostMapping(value = "/scratch/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public Mono<ScratchMiniCactpotNodeResponse> scratch(
-        @PathVariable UUID id,
+        @PathVariable String id,
         @Valid @RequestBody ScratchMiniCactpotNodeRequest request
     ) {
         log.info("Request to scratch position number {} on mini cactpot ticket ID {}", request.getPosition(), id);
@@ -76,7 +73,7 @@ public class MiniCactpotController {
     @PostMapping(value = "/make-selection/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public Mono<MakeMiniCactpotSelectionResponse> makeSelection(
-        @PathVariable UUID id,
+        @PathVariable String id,
         @Valid @RequestBody MakeMiniCactpotSelectionRequest request
     ) {
         log.info("Request to select {} on mini cactpot ticket ID {}", request.getSelection(), id);

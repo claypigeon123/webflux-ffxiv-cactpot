@@ -1,7 +1,7 @@
 package com.cp.minigames.minicactpotservice.util;
 
-import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotNode;
-import com.cp.minigames.minicactpotservice.model.attributes.MiniCactpotPublicNode;
+import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotNode;
+import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotPublicNode;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
