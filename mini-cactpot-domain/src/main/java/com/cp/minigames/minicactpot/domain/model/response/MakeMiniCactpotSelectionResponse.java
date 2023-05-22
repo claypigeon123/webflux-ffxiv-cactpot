@@ -6,16 +6,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class MakeMiniCactpotSelectionResponse {
-    private String id;
-    private List<MiniCactpotPublicNode> board;
-    private MiniCactpotGameStage stage;
-    private Integer winnings;
+@Jacksonized
+public record MakeMiniCactpotSelectionResponse(
+    String id,
+    List<MiniCactpotPublicNode> board,
+    MiniCactpotGameStage stage,
+    Integer winnings
+) {
 }

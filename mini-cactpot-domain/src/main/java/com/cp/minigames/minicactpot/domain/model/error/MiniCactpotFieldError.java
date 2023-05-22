@@ -1,11 +1,12 @@
 package com.cp.minigames.minicactpot.domain.model.error;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.extern.jackson.Jacksonized;
 
-@Value
 @Builder
-@RequiredArgsConstructor
-public class MiniCactpotFieldError {
-    String field;
-    String error;
+@Jacksonized
+public record MiniCactpotFieldError(
+    String field,
+    String error
+) {
 }

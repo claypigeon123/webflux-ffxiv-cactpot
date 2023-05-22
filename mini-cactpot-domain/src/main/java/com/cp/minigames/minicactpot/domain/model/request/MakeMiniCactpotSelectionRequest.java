@@ -1,18 +1,13 @@
 package com.cp.minigames.minicactpot.domain.model.request;
 
 import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotSelection;
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.extern.jackson.Jacksonized;
 
-import javax.validation.constraints.NotNull;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class MakeMiniCactpotSelectionRequest {
-    @NotNull(message = "Mini cactpot selection cannot be null")
-    private MiniCactpotSelection selection;
+@Jacksonized
+public record MakeMiniCactpotSelectionRequest(
+    @NotNull(message = "Mini cactpot selection cannot be null") MiniCactpotSelection selection
+) {
 }

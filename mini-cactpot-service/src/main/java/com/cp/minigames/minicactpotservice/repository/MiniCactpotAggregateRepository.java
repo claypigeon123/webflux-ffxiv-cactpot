@@ -1,7 +1,7 @@
 package com.cp.minigames.minicactpotservice.repository;
 
 import com.cp.minigames.minicactpot.domain.model.aggregate.MiniCactpotAggregate;
-import com.cp.minigames.minicactpot.domain.model.util.MiniCactpotAggregateProperty;
+import com.cp.minigames.minicactpot.domain.model.util.AggregateConstants;
 import com.cp.minigames.minicactpotservice.repository.base.ReactiveRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,25 +30,25 @@ public class MiniCactpotAggregateRepository implements ReactiveRepository<MiniCa
 
     @Override
     public Flux<MiniCactpotAggregate> query(MultiValueMap<String, String> params) {
-        Optional<String> createdDateFrom = params.getOrDefault(MiniCactpotAggregateProperty.CREATED_DATE_FROM, List.of()).stream().findFirst();
-        Optional<String> createdDateTo = params.getOrDefault(MiniCactpotAggregateProperty.CREATED_DATE_TO, List.of()).stream().findFirst();
-        Optional<List<String>> stages = Optional.ofNullable(params.get(MiniCactpotAggregateProperty.STAGE));
-        Optional<List<String>> stagesNot = Optional.ofNullable(params.get(MiniCactpotAggregateProperty.STAGE_NOT));
+        Optional<String> createdDateFrom = params.getOrDefault(AggregateConstants.CREATED_DATE_FROM, List.of()).stream().findFirst();
+        Optional<String> createdDateTo = params.getOrDefault(AggregateConstants.CREATED_DATE_TO, List.of()).stream().findFirst();
+        Optional<List<String>> stages = Optional.ofNullable(params.get(AggregateConstants.STAGE));
+        Optional<List<String>> stagesNot = Optional.ofNullable(params.get(AggregateConstants.STAGE_NOT));
 
         Query query = new Query();
 
-        createdDateFrom.ifPresent(s -> query.addCriteria(QueryCriteria.where("STR_TO_UTC(" + MiniCactpotAggregateProperty.CREATED_DATE + ")").gte(s)));
+        createdDateFrom.ifPresent(s -> query.addCriteria(QueryCriteria.where("STR_TO_UTC(" + AggregateConstants.CREATED_DATE + ")").gte(s)));
 
-        createdDateTo.ifPresent(s -> query.addCriteria(QueryCriteria.where("STR_TO_UTC(" + MiniCactpotAggregateProperty.CREATED_DATE + ")").lte(s)));
+        createdDateTo.ifPresent(s -> query.addCriteria(QueryCriteria.where("STR_TO_UTC(" + AggregateConstants.CREATED_DATE + ")").lte(s)));
 
         stages.ifPresent(l -> l.stream()
             .limit(MULTI_LIST_LIMIT)
-            .forEach(i -> query.addCriteria(QueryCriteria.where(MiniCactpotAggregateProperty.STAGE).is(i)))
+            .forEach(i -> query.addCriteria(QueryCriteria.where(AggregateConstants.STAGE).is(i)))
         );
 
         stagesNot.ifPresent(l -> l.stream()
             .limit(MULTI_LIST_LIMIT)
-            .forEach(i -> query.addCriteria(QueryCriteria.where(MiniCactpotAggregateProperty.STAGE).ne(i)))
+            .forEach(i -> query.addCriteria(QueryCriteria.where(AggregateConstants.STAGE).ne(i)))
         );
 
         log.debug("QUERY: {}", query.toN1qlSelectString(template, MiniCactpotAggregate.class, false));

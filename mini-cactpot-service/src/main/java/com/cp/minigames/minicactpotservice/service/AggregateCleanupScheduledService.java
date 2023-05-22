@@ -3,7 +3,7 @@ package com.cp.minigames.minicactpotservice.service;
 import com.cp.minigames.minicactpotservice.config.properties.CleanupProperties;
 import com.cp.minigames.minicactpot.domain.model.aggregate.MiniCactpotAggregate;
 import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotGameStage;
-import com.cp.minigames.minicactpot.domain.model.util.MiniCactpotAggregateProperty;
+import com.cp.minigames.minicactpot.domain.model.util.AggregateConstants;
 import com.cp.minigames.minicactpotservice.repository.MiniCactpotAggregateRepository;
 import com.cp.minigames.minicactpotservice.repository.base.ReactiveRepository;
 import org.slf4j.Logger;
@@ -49,8 +49,8 @@ public class AggregateCleanupScheduledService {
         OffsetDateTime cutoff = OffsetDateTime.now(clock).minusHours(cleanupProperties.getCutoffHours());
 
         miniCactpotAggregateRepository.query(new LinkedMultiValueMap<>(Map.of(
-            MiniCactpotAggregateProperty.CREATED_DATE_TO, List.of(cutoff.format(dtf)),
-            MiniCactpotAggregateProperty.STAGE_NOT, List.of(MiniCactpotGameStage.DONE.toString())
+            AggregateConstants.CREATED_DATE_TO, List.of(cutoff.format(dtf)),
+            AggregateConstants.STAGE_NOT, List.of(MiniCactpotGameStage.DONE.toString())
         )))
             .map(MiniCactpotAggregate::getId)
             .flatMap(id -> miniCactpotAggregateRepository.delete(id).thenReturn(1))
