@@ -14,8 +14,7 @@ import com.cp.minigames.minicactpot.domain.model.response.ScratchMiniCactpotNode
 import com.cp.minigames.minicactpot.domain.model.response.StartMiniCactpotGameResponse;
 import com.cp.minigames.minicactpotservice.repository.MiniCactpotAggregateRepository;
 import com.cp.minigames.minicactpotservice.repository.base.ReactiveRepository;
-import com.cp.minigames.minicactpotservice.util.MiniCactpotBoardMapper;
-import com.cp.minigames.minicactpotservice.util.RandomNumberGenerator;
+import com.cp.minigames.minicactpotservice.util.MiniCactpotBoardUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Flux;
@@ -30,23 +29,20 @@ import java.util.*;
 public class MiniCactpotService {
     private final ReactiveRepository<MiniCactpotAggregate, String> miniCactpotAggregateRepository;
     private final MiniCactpotProperties miniCactpotProperties;
-    private final MiniCactpotBoardMapper miniCactpotBoardMapper;
-    private final RandomNumberGenerator rng;
+    private final MiniCactpotBoardUtils miniCactpotBoardUtils;
     private final DateTimeFormatter dtf;
     private final Clock clock;
 
     public MiniCactpotService(
         MiniCactpotAggregateRepository miniCactpotAggregateRepository,
         MiniCactpotProperties miniCactpotProperties,
-        MiniCactpotBoardMapper miniCactpotBoardMapper,
-        RandomNumberGenerator rng,
+        MiniCactpotBoardUtils miniCactpotBoardUtils,
         DateTimeFormatter dtf,
         Clock clock
     ) {
         this.miniCactpotAggregateRepository = miniCactpotAggregateRepository;
         this.miniCactpotProperties = miniCactpotProperties;
-        this.miniCactpotBoardMapper = miniCactpotBoardMapper;
-        this.rng = rng;
+        this.miniCactpotBoardUtils = miniCactpotBoardUtils;
         this.dtf = dtf;
         this.clock = clock;
     }
@@ -60,7 +56,7 @@ public class MiniCactpotService {
             .query(queryParams)
             .map(saved -> GetMiniCactpotTicketResponse.builder()
                 .id(saved.getId())
-                .board(miniCactpotBoardMapper.mapPrivateBoardToPublic(saved.getBoard()))
+                .board(miniCactpotBoardUtils.mapPrivateBoardToPublic(saved.getBoard()))
                 .winnings(saved.getWinnings())
                 .stage(saved.getStage())
                 .createdDate(saved.getCreatedDate())
@@ -72,7 +68,7 @@ public class MiniCactpotService {
         return fetchGameBoard(id)
             .map(saved -> GetMiniCactpotTicketResponse.builder()
                 .id(saved.getId())
-                .board(miniCactpotBoardMapper.mapPrivateBoardToPublic(saved.getBoard()))
+                .board(miniCactpotBoardUtils.mapPrivateBoardToPublic(saved.getBoard()))
                 .winnings(saved.getWinnings())
                 .stage(saved.getStage())
                 .createdDate(saved.getCreatedDate())
@@ -85,7 +81,7 @@ public class MiniCactpotService {
             .flatMap(miniCactpotAggregateRepository::upsert)
             .map(saved -> StartMiniCactpotGameResponse.builder()
                 .id(saved.getId())
-                .board(miniCactpotBoardMapper.mapPrivateBoardToPublic(saved.getBoard()))
+                .board(miniCactpotBoardUtils.mapPrivateBoardToPublic(saved.getBoard()))
                 .stage(saved.getStage())
                 .build()
             );
@@ -97,7 +93,7 @@ public class MiniCactpotService {
             .flatMap(miniCactpotAggregateRepository::upsert)
             .map(saved -> ScratchMiniCactpotNodeResponse.builder()
                 .id(saved.getId())
-                .board(miniCactpotBoardMapper.mapPrivateBoardToPublic(saved.getBoard()))
+                .board(miniCactpotBoardUtils.mapPrivateBoardToPublic(saved.getBoard()))
                 .stage(saved.getStage())
                 .build()
             );
@@ -109,7 +105,7 @@ public class MiniCactpotService {
             .flatMap(miniCactpotAggregateRepository::upsert)
             .map(saved -> MakeMiniCactpotSelectionResponse.builder()
                 .id(saved.getId())
-                .board(miniCactpotBoardMapper.mapPrivateBoardToPublic(saved.getBoard()))
+                .board(miniCactpotBoardUtils.mapPrivateBoardToPublic(saved.getBoard()))
                 .stage(saved.getStage())
                 .winnings(saved.getWinnings())
                 .build()
@@ -122,7 +118,7 @@ public class MiniCactpotService {
     // ------------
 
     private Mono<MiniCactpotAggregate> initializeNewGame() {
-        List<MiniCactpotNode> board = initializeNodes();
+        List<MiniCactpotNode> board = miniCactpotBoardUtils.initializeNodes();
         return Mono.just(MiniCactpotAggregate.builder()
             .id(UUID.randomUUID().toString())
             .board(board)
@@ -132,24 +128,6 @@ public class MiniCactpotService {
             .createdDate(OffsetDateTime.now(clock).format(dtf))
             .build()
         );
-    }
-
-    private List<MiniCactpotNode> initializeNodes() {
-        List<MiniCactpotNode> nodes = new ArrayList<>();
-        int initialRevealed = rng.generate(1, 9);
-        for (int i = 1; i <= 9; i++) {
-            MiniCactpotNode node = MiniCactpotNode.builder()
-                .number(i)
-                .isRevealed(false)
-                .build();
-            if (i == initialRevealed) {
-                node.setIsRevealed(true);
-            }
-            nodes.add(node);
-        }
-
-        Collections.shuffle(nodes);
-        return nodes;
     }
 
     private Mono<MiniCactpotAggregate> fetchGameBoard(String id) {

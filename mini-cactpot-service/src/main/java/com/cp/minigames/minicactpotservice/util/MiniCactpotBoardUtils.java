@@ -5,10 +5,17 @@ import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotPublicNod
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
-public class MiniCactpotBoardMapper {
+public class MiniCactpotBoardUtils {
+
+    private final RandomNumberGenerator rng;
+
+    public MiniCactpotBoardUtils(RandomNumberGenerator rng) {
+        this.rng = rng;
+    }
 
     public List<MiniCactpotPublicNode> mapPrivateBoardToPublic(List<MiniCactpotNode> board) {
         List<MiniCactpotPublicNode> publicNodes = new ArrayList<>();
@@ -27,5 +34,23 @@ public class MiniCactpotBoardMapper {
         }
 
         return publicNodes;
+    }
+
+    public List<MiniCactpotNode> initializeNodes() {
+        List<MiniCactpotNode> nodes = new ArrayList<>();
+        int initialRevealed = rng.generate(1, 9);
+        for (int i = 1; i <= 9; i++) {
+            MiniCactpotNode node = MiniCactpotNode.builder()
+                .number(i)
+                .isRevealed(false)
+                .build();
+            if (i == initialRevealed) {
+                node.setIsRevealed(true);
+            }
+            nodes.add(node);
+        }
+
+        Collections.shuffle(nodes);
+        return nodes;
     }
 }

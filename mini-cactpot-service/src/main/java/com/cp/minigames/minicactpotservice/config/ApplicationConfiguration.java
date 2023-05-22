@@ -13,8 +13,7 @@ public class ApplicationConfiguration {
 
     @Bean
     public DateTimeFormatter dtf() {
-        return DateTimeFormatter
-            .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        return DateTimeFormatter.ISO_OFFSET_DATE_TIME
             .withZone(ZoneId.of(ZoneOffset.UTC.getId()));
     }
 
