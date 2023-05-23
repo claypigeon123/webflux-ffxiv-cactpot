@@ -1,7 +1,11 @@
-package com.cp.minigames.minicactpotservice.util;
+package com.cp.minigames.minicactpotservice.mapper;
 
+import com.cp.minigames.minicactpot.domain.model.aggregate.MiniCactpotAggregate;
 import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotNode;
 import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotPublicNode;
+import com.cp.minigames.minicactpot.domain.model.dto.MiniCactpotTicketDto;
+import com.cp.minigames.minicactpotservice.util.RandomNumberGenerator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -9,13 +13,9 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-public class MiniCactpotBoardUtils {
-
+@RequiredArgsConstructor
+public class MiniCactpotMapper {
     private final RandomNumberGenerator rng;
-
-    public MiniCactpotBoardUtils(RandomNumberGenerator rng) {
-        this.rng = rng;
-    }
 
     public List<MiniCactpotPublicNode> mapPrivateBoardToPublic(List<MiniCactpotNode> board) {
         List<MiniCactpotPublicNode> publicNodes = new ArrayList<>();
@@ -52,5 +52,16 @@ public class MiniCactpotBoardUtils {
 
         Collections.shuffle(nodes);
         return nodes;
+    }
+
+    public MiniCactpotTicketDto mapDtoFromAggregate(MiniCactpotAggregate aggregate) {
+        return MiniCactpotTicketDto.builder()
+            .id(aggregate.getId())
+            .board(mapPrivateBoardToPublic(aggregate.getBoard()))
+            .winnings(aggregate.getWinnings())
+            .stage(aggregate.getStage())
+            .createdDate(aggregate.getCreatedDate())
+            .updatedDate(aggregate.getUpdatedDate())
+            .build();
     }
 }

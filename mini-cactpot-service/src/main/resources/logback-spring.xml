@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>
-                %boldRed(%d{yyyy-MM-dd'T'HH:mm:ss.SSS'Z', UTC}) %highlight(%-5level) [%boldYellow(%-60.60(%c{60}))]: %msg%n%throwable
+                %boldGreen(%d{yyyy-MM-dd'T'HH:mm:ss.SSS'Z', UTC}) %highlight(%-5level) [%boldYellow(%15.15t)] [%boldYellow(%-35.35(%c{35}))]: %msg%n%throwable
             </Pattern>
-        </layout>
+        </encoder>
     </appender>
-
     <root level="info">
         <appender-ref ref="Console" />
     </root>

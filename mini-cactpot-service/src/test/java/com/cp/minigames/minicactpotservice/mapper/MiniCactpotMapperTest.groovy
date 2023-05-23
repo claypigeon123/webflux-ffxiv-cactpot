@@ -1,17 +1,16 @@
-package com.cp.minigames.minicactpotservice.util
+package com.cp.minigames.minicactpotservice.mapper
 
 import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotNode
 import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotPublicNode
-import spock.lang.*
+import com.cp.minigames.minicactpotservice.util.RandomNumberGenerator
+import spock.lang.Specification
 
-class MiniCactpotBoardUtilsTest extends Specification {
+class MiniCactpotMapperTest extends Specification {
 
-    MiniCactpotBoardUtils utils
+    MiniCactpotMapper miniCactpotMapper
 
     void setup() {
-        utils = new MiniCactpotBoardUtils(
-            new RandomNumberGenerator()
-        )
+        miniCactpotMapper = new MiniCactpotMapper(new RandomNumberGenerator())
     }
 
     def "mapping private board to public"() {
@@ -41,7 +40,7 @@ class MiniCactpotBoardUtilsTest extends Specification {
         )
 
         when:
-        def result = utils.mapPrivateBoardToPublic(input)
+        def result = miniCactpotMapper.mapPrivateBoardToPublic(input)
 
         then:
         result == expected
@@ -56,7 +55,7 @@ class MiniCactpotBoardUtilsTest extends Specification {
 
     def "initializing a new board"() {
         when:
-        def result = utils.initializeNodes()
+        def result = miniCactpotMapper.initializeNodes()
 
         then:
         result.size() == 9
@@ -64,11 +63,11 @@ class MiniCactpotBoardUtilsTest extends Specification {
         result.stream()
             .map(node -> node.getNumber())
             .reduce(0, (subtotal, number) -> subtotal + number)
-        == (1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9)
+            == (1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9)
 
         result.stream()
             .filter(node -> node.getIsRevealed())
             .count()
-        == 1
+            == 1
     }
 }

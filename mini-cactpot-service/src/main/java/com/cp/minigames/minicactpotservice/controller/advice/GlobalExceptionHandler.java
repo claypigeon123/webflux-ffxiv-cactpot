@@ -1,36 +1,40 @@
 package com.cp.minigames.minicactpotservice.controller.advice;
 
-import com.cp.minigames.minicactpot.domain.exception.base.MiniCactpotGameException;
-import com.cp.minigames.minicactpot.domain.model.error.MiniCactpotError;
-import com.cp.minigames.minicactpot.domain.model.error.MiniCactpotFieldError;
+import com.cp.minigames.minicactpot.domain.exception.MiniCactpotGameException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.support.WebExchangeBindException;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(MiniCactpotGameException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Mono<MiniCactpotError> genericError(MiniCactpotGameException e) {
-        return Mono.just(MiniCactpotError.builder()
-            .error(e.getMessage())
-            .build()
-        );
+    @ExceptionHandler(ConstraintViolationException.class)
+    public Mono<String> constraintViolation(ConstraintViolationException e) {
+        return Flux.fromIterable(e.getConstraintViolations())
+            .map(ConstraintViolation::getMessage)
+            .filter(violation -> !violation.isBlank())
+            .collectList()
+            .flatMap(violations -> Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, String.join(", ", violations))));
     }
 
     @ExceptionHandler(WebExchangeBindException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Flux<MiniCactpotFieldError> invalidBody(WebExchangeBindException e) {
+    public Mono<String> invalidBody(WebExchangeBindException e) {
         return Flux.fromIterable(e.getBindingResult().getFieldErrors())
-            .map(error -> MiniCactpotFieldError.builder()
-                .field(error.getField())
-                .error(error.getDefaultMessage())
-                .build()
-            );
+            .mapNotNull(FieldError::getDefaultMessage)
+            .collectList()
+            .flatMap(violations -> Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, String.join(", ", violations))));
+
+    }
+
+    @ExceptionHandler(MiniCactpotGameException.class)
+    public Mono<String> domainException(MiniCactpotGameException e) {
+        return Mono.error(new ResponseStatusException(e.getStatus(), e.getMessage()));
     }
 }
