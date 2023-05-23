@@ -1,9 +1,9 @@
 package com.cp.minigames.minicactpotservice.service;
 
-import com.cp.minigames.minicactpotservice.config.properties.CleanupProperties;
 import com.cp.minigames.minicactpot.domain.model.aggregate.MiniCactpotAggregate;
 import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotGameStage;
 import com.cp.minigames.minicactpot.domain.model.util.AggregateConstants;
+import com.cp.minigames.minicactpotservice.config.props.CleanupProperties;
 import com.cp.minigames.minicactpotservice.repository.MiniCactpotAggregateRepository;
 import com.cp.minigames.minicactpotservice.repository.base.ReactiveRepository;
 import org.slf4j.Logger;

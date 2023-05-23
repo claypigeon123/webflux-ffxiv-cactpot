@@ -2,7 +2,7 @@ package com.cp.minigames.minicactpotservice.util
 
 import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotNode
 import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotPublicNode
-import spock.lang.*
+import spock.lang.Specification
 
 class MiniCactpotBoardUtilsTest extends Specification {
 

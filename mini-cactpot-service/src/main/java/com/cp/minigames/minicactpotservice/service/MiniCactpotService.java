@@ -1,7 +1,6 @@
 package com.cp.minigames.minicactpotservice.service;
 
 import com.cp.minigames.minicactpot.domain.exception.*;
-import com.cp.minigames.minicactpotservice.config.properties.MiniCactpotProperties;
 import com.cp.minigames.minicactpot.domain.model.aggregate.MiniCactpotAggregate;
 import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotGameStage;
 import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotNode;
@@ -12,6 +11,7 @@ import com.cp.minigames.minicactpot.domain.model.response.GetMiniCactpotTicketRe
 import com.cp.minigames.minicactpot.domain.model.response.MakeMiniCactpotSelectionResponse;
 import com.cp.minigames.minicactpot.domain.model.response.ScratchMiniCactpotNodeResponse;
 import com.cp.minigames.minicactpot.domain.model.response.StartMiniCactpotGameResponse;
+import com.cp.minigames.minicactpotservice.config.props.MiniCactpotProperties;
 import com.cp.minigames.minicactpotservice.repository.MiniCactpotAggregateRepository;
 import com.cp.minigames.minicactpotservice.repository.base.ReactiveRepository;
 import com.cp.minigames.minicactpotservice.util.MiniCactpotBoardUtils;
@@ -23,7 +23,9 @@ import reactor.core.publisher.Mono;
 import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class MiniCactpotService {

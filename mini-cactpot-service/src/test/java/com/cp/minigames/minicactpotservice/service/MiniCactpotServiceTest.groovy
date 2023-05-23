@@ -3,12 +3,12 @@ package com.cp.minigames.minicactpotservice.service
 import com.cp.minigames.minicactpot.domain.model.aggregate.MiniCactpotAggregate
 import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotPublicNode
 import com.cp.minigames.minicactpot.domain.model.response.StartMiniCactpotGameResponse
-import com.cp.minigames.minicactpotservice.config.properties.MiniCactpotProperties
+import com.cp.minigames.minicactpotservice.config.props.MiniCactpotProperties
 import com.cp.minigames.minicactpotservice.repository.MiniCactpotAggregateRepository
 import com.cp.minigames.minicactpotservice.repository.base.ReactiveRepository
 import com.cp.minigames.minicactpotservice.util.MiniCactpotBoardUtils
 import reactor.core.publisher.Mono
-import spock.lang.*
+import spock.lang.Specification
 
 import java.time.Clock
 import java.time.Instant
@@ -16,7 +16,7 @@ import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-import static com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotGameStage.*
+import static com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotGameStage.SCRATCHING_FIRST
 
 class MiniCactpotServiceTest extends Specification {
 
