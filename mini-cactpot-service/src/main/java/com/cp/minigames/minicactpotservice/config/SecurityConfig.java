@@ -28,6 +28,10 @@ public class SecurityConfig {
                 ex.anyExchange().permitAll()
             )
 
+            .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
+            .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
+            .logout(ServerHttpSecurity.LogoutSpec::disable)
+
             .build();
     }
 

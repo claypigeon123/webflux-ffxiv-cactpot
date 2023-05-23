@@ -1,20 +1,19 @@
-package com.cp.minigames.minicactpot.domain.model.response;
+package com.cp.minigames.minicactpot.domain.model.dto;
 
 import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotGameStage;
 import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotPublicNode;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.jackson.Jacksonized;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Builder
 @Jacksonized
-public record GetMiniCactpotTicketResponse(
+public record MiniCactpotTicketDto(
     String id,
-    String createdDate,
+    OffsetDateTime createdDate,
+    OffsetDateTime updatedDate,
     MiniCactpotGameStage stage,
     Integer winnings,
     List<MiniCactpotPublicNode> board

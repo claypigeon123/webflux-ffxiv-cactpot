@@ -4,8 +4,8 @@ import com.cp.minigames.minicactpot.domain.model.aggregate.MiniCactpotAggregate
 import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotPublicNode
 import com.cp.minigames.minicactpot.domain.model.response.StartMiniCactpotGameResponse
 import com.cp.minigames.minicactpotservice.config.props.MiniCactpotProperties
-import com.cp.minigames.minicactpotservice.repository.MiniCactpotAggregateRepository
 import com.cp.minigames.minicactpotservice.repository.base.ReactiveRepository
+import com.cp.minigames.minicactpotservice.repository.impl.MiniCactpotAggregateRepositoryCB
 import com.cp.minigames.minicactpotservice.util.MiniCactpotBoardUtils
 import reactor.core.publisher.Mono
 import spock.lang.Specification
@@ -31,7 +31,7 @@ class MiniCactpotServiceTest extends Specification {
     Map<Integer, Integer> fedMap
 
     void setup() {
-        repository = Mock(MiniCactpotAggregateRepository.class)
+        repository = Mock(MiniCactpotAggregateRepositoryCB.class)
         fedMap = new HashMap<>()
         fedMap.put(6, 10000)
         fedMap.put(7, 36)

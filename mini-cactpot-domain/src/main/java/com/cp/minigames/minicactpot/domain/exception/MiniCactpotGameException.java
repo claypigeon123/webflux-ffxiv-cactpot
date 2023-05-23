@@ -1,4 +1,4 @@
-package com.cp.minigames.minicactpot.domain.exception.base;
+package com.cp.minigames.minicactpot.domain.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
