@@ -4,24 +4,27 @@ import com.cp.minigames.minicactpot.domain.model.aggregate.MiniCactpotAggregate
 import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotPublicNode
 import com.cp.minigames.minicactpot.domain.model.response.StartMiniCactpotGameResponse
 import com.cp.minigames.minicactpotservice.config.props.MiniCactpotProperties
-import com.cp.minigames.minicactpotservice.repository.base.ReactiveRepository
-import com.cp.minigames.minicactpotservice.repository.impl.MiniCactpotAggregateRepositoryCB
-import com.cp.minigames.minicactpotservice.util.MiniCactpotBoardUtils
+import com.cp.minigames.minicactpotservice.mapper.MiniCactpotMapper
+import com.cp.minigames.minicactpotservice.repository.AbstractReactiveMongoRepository
+import com.cp.minigames.minicactpotservice.util.RandomNumberGenerator
 import reactor.core.publisher.Mono
+import spock.lang.Shared
 import spock.lang.Specification
 
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 
 import static com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotGameStage.SCRATCHING_FIRST
 
 class MiniCactpotServiceTest extends Specification {
 
+    @Shared
+    Clock clock = Clock.fixed(Instant.now(), ZoneId.of(ZoneOffset.UTC.getId()))
+
     // Mocks
-    ReactiveRepository<MiniCactpotAggregate, String> repository
+    AbstractReactiveMongoRepository<MiniCactpotAggregate> repository
     MiniCactpotProperties properties
 
     // Target class
@@ -31,7 +34,7 @@ class MiniCactpotServiceTest extends Specification {
     Map<Integer, Integer> fedMap
 
     void setup() {
-        repository = Mock(MiniCactpotAggregateRepositoryCB.class)
+        repository = Mock()
         fedMap = new HashMap<>()
         fedMap.put(6, 10000)
         fedMap.put(7, 36)
@@ -57,9 +60,8 @@ class MiniCactpotServiceTest extends Specification {
         service = new MiniCactpotService(
             repository,
             properties,
-            new MiniCactpotBoardUtils(),
-            DateTimeFormatter.ISO_OFFSET_DATE_TIME.withZone(ZoneId.of(ZoneOffset.UTC.getId())),
-            Clock.fixed(Instant.now(), ZoneId.of(ZoneOffset.UTC.getId()))
+            new MiniCactpotMapper(new RandomNumberGenerator()),
+            clock
         )
     }
 
@@ -72,33 +74,14 @@ class MiniCactpotServiceTest extends Specification {
     }
 
     def "start a new game"() {
-        given:
-        def id = UUID.randomUUID().toString()
-        def expected = StartMiniCactpotGameResponse.builder()
-            .id(id)
-            .stage(SCRATCHING_FIRST)
-            .board(List.of(
-                new MiniCactpotPublicNode(-1),
-                new MiniCactpotPublicNode(4),
-                new MiniCactpotPublicNode(-1),
-                new MiniCactpotPublicNode(-1),
-                new MiniCactpotPublicNode(-1),
-                new MiniCactpotPublicNode(-1),
-                new MiniCactpotPublicNode(-1),
-                new MiniCactpotPublicNode(-1),
-                new MiniCactpotPublicNode(-1),
-            ))
-
         when:
         def result = service.startGame().block()
 
         then:
-        1 * repository.upsert(_) >> { input, sg ->
-            return Mono.just(input)
-        }
+        1 * repository.insert(_) >> { MiniCactpotAggregate it -> Mono.just(it) }
 
-        result.getId() != null
-        result.getBoard().size() == 9
-        result.getStage() == SCRATCHING_FIRST
+        result.id() != null
+        result.board().size() == 9
+        result.stage() == SCRATCHING_FIRST
     }
 }
