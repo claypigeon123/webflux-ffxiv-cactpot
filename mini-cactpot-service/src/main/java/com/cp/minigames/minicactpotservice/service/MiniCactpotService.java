@@ -49,7 +49,7 @@ public class MiniCactpotService {
             )
             .map(tuple2 -> PaginatedResponse.<MiniCactpotTicketDto>builder()
                 .documents(tuple2.getT1())
-                .pagination(Pagination.fromQueryRes(page, limit, tuple2.getT2(), tuple2.getT1().size()))
+                .pagination(Pagination.fromQueryRes(page, limit, tuple2.getT2()))
                 .build()
             );
     }
