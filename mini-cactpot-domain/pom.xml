@@ -10,7 +10,6 @@
     </parent>
 
     <artifactId>mini-cactpot-domain</artifactId>
-    <version>${revision}</version>
 
     <name>Mini Cactpot - Domain</name>
 

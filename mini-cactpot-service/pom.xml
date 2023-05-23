@@ -10,7 +10,6 @@
     </parent>
 
     <artifactId>mini-cactpot-service</artifactId>
-    <version>${revision}</version>
 
     <name>Mini Cactpot - Service</name>
 
