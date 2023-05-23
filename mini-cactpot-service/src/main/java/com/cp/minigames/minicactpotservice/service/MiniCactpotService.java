@@ -41,12 +41,8 @@ public class MiniCactpotService {
     }
 
     public Mono<PaginatedResponse<MiniCactpotTicketDto>> queryTickets(MultiValueMap<String, String> queryParams, long page, long limit) {
-        return Mono.zip(
-                miniCactpotAggregateRepository.query(queryParams, page, limit)
-                    .map(miniCactpotMapper::mapDtoFromAggregate)
-                    .collectList(),
-                miniCactpotAggregateRepository.count(queryParams)
-            )
+        return miniCactpotAggregateRepository.queryWithCount(queryParams, page, limit)
+            .map(tuple2 -> tuple2.mapT1(miniCactpotMapper::mapDtosFromAggregates))
             .map(tuple2 -> PaginatedResponse.<MiniCactpotTicketDto>builder()
                 .documents(tuple2.getT1())
                 .pagination(Pagination.fromQueryRes(page, limit, tuple2.getT2()))

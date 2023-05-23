@@ -8,7 +8,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.MultiValueMap;
 
-import static com.cp.minigames.minicactpot.domain.model.util.AggregateConstants.*;
+import static com.cp.minigames.minicactpot.domain.model.util.AggregateConstants.STAGE;
+import static com.cp.minigames.minicactpot.domain.model.util.AggregateConstants.STAGE_NOT;
 
 @Repository
 public class MiniCactpotAggregateRepository extends AbstractReactiveMongoRepository<MiniCactpotAggregate> {
@@ -20,18 +21,9 @@ public class MiniCactpotAggregateRepository extends AbstractReactiveMongoReposit
 
     @Override
     protected Query buildQuery(MultiValueMap<String, String> queryParams) {
-        return MongoQueryBuilder.init()
-            // created date from / to
-            .withDateFrom(CREATED_DATE, queryParams.getFirst(CREATED_DATE_FROM))
-            .withDateTo(CREATED_DATE, queryParams.getFirst(CREATED_DATE_TO))
-            // updated date from / to
-            .withDateFrom(UPDATED_DATE, queryParams.getFirst(UPDATED_DATE_FROM))
-            .withDateTo(UPDATED_DATE, queryParams.getFirst(UPDATED_DATE_TO))
-            // stages
+        return MongoQueryBuilder.init(super.buildQuery(queryParams))
             .withInMatch(STAGE, queryParams.get(STAGE))
-            // stages NOT
             .withNotInMatch(STAGE, queryParams.get(STAGE_NOT))
-            // done
             .build();
     }
 }

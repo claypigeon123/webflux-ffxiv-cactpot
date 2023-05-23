@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -63,5 +64,11 @@ public class MiniCactpotMapper {
             .createdDate(aggregate.getCreatedDate())
             .updatedDate(aggregate.getUpdatedDate())
             .build();
+    }
+
+    public List<MiniCactpotTicketDto> mapDtosFromAggregates(Collection<MiniCactpotAggregate> aggregates) {
+        return aggregates.stream()
+            .map(this::mapDtoFromAggregate)
+            .toList();
     }
 }

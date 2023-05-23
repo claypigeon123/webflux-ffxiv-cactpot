@@ -1,8 +1,6 @@
 package com.cp.minigames.minicactpotservice.service
 
 import com.cp.minigames.minicactpot.domain.model.aggregate.MiniCactpotAggregate
-import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotPublicNode
-import com.cp.minigames.minicactpot.domain.model.response.StartMiniCactpotGameResponse
 import com.cp.minigames.minicactpotservice.config.props.MiniCactpotProperties
 import com.cp.minigames.minicactpotservice.mapper.MiniCactpotMapper
 import com.cp.minigames.minicactpotservice.repository.AbstractReactiveMongoRepository

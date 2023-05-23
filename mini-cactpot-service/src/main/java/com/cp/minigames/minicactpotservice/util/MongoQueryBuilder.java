@@ -36,6 +36,11 @@ public class MongoQueryBuilder {
         return new MongoQueryBuilder();
     }
 
+    public static MongoQueryBuilder init(Query query) {
+        Query copy = Query.of(query);
+        return new MongoQueryBuilder(copy);
+    }
+
     // ---
 
     /**

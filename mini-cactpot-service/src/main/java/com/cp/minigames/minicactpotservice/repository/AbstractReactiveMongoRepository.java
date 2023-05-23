@@ -1,6 +1,7 @@
 package com.cp.minigames.minicactpotservice.repository;
 
 import com.cp.minigames.minicactpot.domain.model.aggregate.Aggregate;
+import com.cp.minigames.minicactpotservice.util.MongoQueryBuilder;
 import com.mongodb.client.result.DeleteResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.FindAndReplaceOptions;
@@ -9,8 +10,11 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
-import static com.cp.minigames.minicactpot.domain.model.util.AggregateConstants.ID;
+import java.util.List;
+
+import static com.cp.minigames.minicactpot.domain.model.util.AggregateConstants.*;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @RequiredArgsConstructor
@@ -23,16 +27,6 @@ public abstract class AbstractReactiveMongoRepository<T extends Aggregate> imple
     @Override
     public Mono<T> findById(String id) {
         return template.findById(id, clazz, collectionName);
-    }
-
-    @Override
-    public Mono<Boolean> existsById(String id) {
-        return template.exists(Query.query(where(ID).is(id)), clazz, collectionName);
-    }
-
-    @Override
-    public Flux<T> findAll() {
-        return template.findAll(clazz, collectionName);
     }
 
     @Override
@@ -50,6 +44,17 @@ public abstract class AbstractReactiveMongoRepository<T extends Aggregate> imple
         Query query = buildQuery(queryMap);
 
         return template.count(query, clazz, collectionName);
+    }
+
+    @Override
+    public Mono<Tuple2<List<T>, Long>> queryWithCount(MultiValueMap<String, String> queryMap, long page, long limit) {
+        Query query = buildPaginatedQuery(queryMap, page, limit);
+        Query countQuery = Query.of(query).limit(0).skip(0);
+
+        return Mono.zip(
+            template.query(clazz).inCollection(collectionName).matching(query).all().collectList(),
+            template.count(countQuery, clazz, collectionName)
+        );
     }
 
     @Override
@@ -80,7 +85,14 @@ public abstract class AbstractReactiveMongoRepository<T extends Aggregate> imple
 
     // --
 
-    protected abstract Query buildQuery(MultiValueMap<String, String> queryMap);
+    protected Query buildQuery(MultiValueMap<String, String> queryMap) {
+        return MongoQueryBuilder.init()
+            .withDateFrom(CREATED_DATE, queryMap.getFirst(CREATED_DATE_FROM))
+            .withDateTo(CREATED_DATE, queryMap.getFirst(CREATED_DATE_TO))
+            .withDateFrom(UPDATED_DATE, queryMap.getFirst(UPDATED_DATE_FROM))
+            .withDateTo(UPDATED_DATE, queryMap.getFirst(UPDATED_DATE_TO))
+            .build();
+    }
 
     protected Query buildPaginatedQuery(MultiValueMap<String, String> queryMap, long page, long limit) {
         Query query = buildQuery(queryMap);
