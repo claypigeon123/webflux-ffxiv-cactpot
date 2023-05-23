@@ -31,7 +31,7 @@ public class MiniCactpotController {
 
     @GetMapping("/winnings")
     public Mono<Map<Integer, Integer>> getWinningsMap() {
-        log.info("Request to retrieve winnings map for mini cactpot");
+        log.debug("Request to retrieve winnings map for mini cactpot");
         return miniCactpotService.getWinningsMap();
     }
 
@@ -41,19 +41,19 @@ public class MiniCactpotController {
         @RequestParam(defaultValue = "1") @Min(1) Long page,
         @RequestParam(defaultValue = "32") @Min(0) Long limit
     ) {
-        log.info("Request to query mini cactpot tickets by {}", queryParams);
+        log.debug("Request to query mini cactpot tickets by {}", queryParams);
         return miniCactpotService.queryTickets(queryParams, page, limit);
     }
 
     @GetMapping("/tickets/{id}")
     public Mono<MiniCactpotTicketDto> getTicket(@PathVariable String id) {
-        log.info("Request to retrieve mini cactpot ticket by id {}", id);
+        log.debug("Request to retrieve mini cactpot ticket by id {}", id);
         return miniCactpotService.getTicket(id);
     }
 
     @PostMapping(value = "/start-new-game", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<StartMiniCactpotGameResponse> startGame() {
-        log.info("Request to start new mini cactpot game");
+        log.debug("Request to start new mini cactpot game");
         return miniCactpotService.startGame();
     }
 
@@ -62,7 +62,7 @@ public class MiniCactpotController {
         @PathVariable String id,
         @Valid @RequestBody ScratchMiniCactpotNodeRequest request
     ) {
-        log.info("Request to scratch position number {} on mini cactpot ticket ID {}", request.position(), id);
+        log.debug("Request to scratch position number {} on mini cactpot ticket ID {}", request.position(), id);
         return miniCactpotService.scratch(id, request);
     }
 
@@ -71,7 +71,7 @@ public class MiniCactpotController {
         @PathVariable String id,
         @Valid @RequestBody MakeMiniCactpotSelectionRequest request
     ) {
-        log.info("Request to select {} on mini cactpot ticket ID {}", request.selection(), id);
+        log.debug("Request to select {} on mini cactpot ticket ID {}", request.selection(), id);
         return miniCactpotService.makeSelection(id, request);
     }
 }

@@ -33,6 +33,10 @@ application:
     aggregate-cleanup-cron: 0 0 * ? * *
     cutoff-hours: 24
 
+logging:
+  level:
+    com.cp: DEBUG
+
 mini-cactpot:
   winnings-map:
     6: 10000
