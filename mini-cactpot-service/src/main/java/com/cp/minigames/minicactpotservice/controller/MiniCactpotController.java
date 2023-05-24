@@ -12,7 +12,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -51,13 +50,13 @@ public class MiniCactpotController {
         return miniCactpotService.getTicket(id);
     }
 
-    @PostMapping(value = "/start-new-game", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/start-new-game")
     public Mono<StartMiniCactpotGameResponse> startGame() {
         log.debug("Request to start new mini cactpot game");
         return miniCactpotService.startGame();
     }
 
-    @PostMapping(value = "/scratch/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/scratch/{id}")
     public Mono<ScratchMiniCactpotNodeResponse> scratch(
         @PathVariable String id,
         @Valid @RequestBody ScratchMiniCactpotNodeRequest request
@@ -66,7 +65,7 @@ public class MiniCactpotController {
         return miniCactpotService.scratch(id, request);
     }
 
-    @PostMapping(value = "/make-selection/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/make-selection/{id}")
     public Mono<MakeMiniCactpotSelectionResponse> makeSelection(
         @PathVariable String id,
         @Valid @RequestBody MakeMiniCactpotSelectionRequest request

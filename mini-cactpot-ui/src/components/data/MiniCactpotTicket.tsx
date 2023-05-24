@@ -2,6 +2,7 @@ import { Center, Grid, Overlay, Text } from '@mantine/core'
 import { FC, useState } from 'react'
 import { MiniCactpotGameStage, MiniCactpotSelection, PageProps } from '../../Interfaces'
 import { appApi } from '../../redux/api/AppApi'
+import { mgpFormat } from '../../util/DomainUtils'
 import { displayGenericErrorNotification } from '../../util/NotificationUtils'
 import { LabelledLoadingSpinner } from '../feedback/LabelledLoadingSpinner'
 import { MiniCactpotNodeDisplay } from './MiniCactpotNodeDisplay'
@@ -53,9 +54,9 @@ export const MiniCactpotTicket: FC<MiniCactpotTicketProps> = ({ extendedDisplay 
         <>
             <Text align='center' size='lg'> Ticket </Text>
             <Center style={{ position: 'relative' }}>
-                {ticket.stage === MiniCactpotGameStage.DONE &&
+                {ticket.stage === MiniCactpotGameStage.DONE && ticket.winnings &&
                     <Overlay center opacity={0.4} blur={1} radius='lg'>
-                        <Text align='center' color='green' weight={600}> Won {ticket.winnings} MGP </Text>
+                        <Text align='center' color='green' weight={600}> Won {mgpFormat.format(ticket.winnings)} MGP </Text>
                     </Overlay>
                 }
                 <Grid justify='center' mb='xl'>
