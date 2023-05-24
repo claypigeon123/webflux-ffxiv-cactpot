@@ -1,8 +1,9 @@
-import { Container, useMantineTheme } from "@mantine/core";
+import { useMantineTheme } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { FC } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "./components/layout/Layout";
+import { MiniCactpotGamePage } from "./components/pages/MiniCactpotGamePage";
 
 export const App: FC = () => {
     const { breakpoints } = useMantineTheme();
@@ -10,9 +11,9 @@ export const App: FC = () => {
 
     return (
         <BrowserRouter>
-            <Layout>
+            <Layout extendedDisplay={matches}>
                 <Routes>
-                    <Route path='/' element={<>Hello there</>} />
+                    <Route path='/' element={<MiniCactpotGamePage extendedDisplay={matches} />} />
                 </Routes>
             </Layout>
         </BrowserRouter>

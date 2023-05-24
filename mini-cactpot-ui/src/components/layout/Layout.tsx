@@ -1,25 +1,30 @@
-import { AppShell, Box, Button, Center, Container, Group, Stack, Text, createStyles, useMantineTheme } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
+import { AppShell, Box, Button, Center, Container, Group, Stack, Text, createStyles } from '@mantine/core';
 import { FC, ReactElement } from 'react';
-import { FaFile, FaTicketAlt } from 'react-icons/fa';
+import { FaExclamation, FaTicketAlt } from 'react-icons/fa';
+import { PageProps } from '../../Interfaces';
+import { useAppDispatch } from '../../redux/util/Hooks';
+import { appApi } from '../../redux/api/AppApi';
+import { appSlice } from '../../redux/slice/AppSlice';
+import { showNotification } from '@mantine/notifications';
+import { displayGenericErrorNotification, displaySuccessNotification } from '../../util/NotificationUtils';
 
 
-export interface LayoutProps {
+export interface LayoutProps extends PageProps {
     children?: ReactElement
 }
 
-const useStyles = createStyles(({ colors }, { matches }: { matches: boolean }) => ({
+const useStyles = createStyles(({ colors }, { extendedDisplay = true }: { extendedDisplay: boolean }) => ({
     main: {
         background: 'linear-gradient(to right top, #1c1f59, #162052, #12204b, #102043, #111f3b, #171c34, #1a192d, #1b1626, #1d121e, #1b0d16, #18090e, #120505)',
-        paddingLeft: !matches ? '0 !important' : undefined,
-        paddingRight: !matches ? '0 !important' : undefined,
+        paddingLeft: !extendedDisplay ? '0 !important' : undefined,
+        paddingRight: !extendedDisplay ? '0 !important' : undefined,
         paddingBottom: 0,
         paddingTop: 0
     },
     header: {
         background: colors['dark'][8],
         border: `1px solid ${colors['dark'][6]}`,
-        borderRadius: '1rem 1rem 0 0',
+        borderRadius: extendedDisplay ? '1rem 1rem 0 0' : 'none',
     },
     content: {
         background: colors['dark'][9],
@@ -29,20 +34,41 @@ const useStyles = createStyles(({ colors }, { matches }: { matches: boolean }) =
     }
 }))
 
-export const Layout: FC<LayoutProps> = ({ children }) => {
+export const Layout: FC<LayoutProps> = ({ extendedDisplay = true, children }) => {
 
-    const { breakpoints, colors } = useMantineTheme();
-    const matches = useMediaQuery(`(min-width: ${breakpoints.md})`);
-    const { classes } = useStyles({ matches });
+    const { classes } = useStyles({ extendedDisplay });
+    const dispatch = useAppDispatch();
+
+    const [startNewGame, { isLoading: isStartingNewGame }] = appApi.useStartNewGameMutation();
+
+    const onStartNewGame = async () => {
+        try {
+            const res = await startNewGame({}).unwrap();
+            dispatch(appSlice.actions.changeActiveTicket(res.id));
+            displaySuccessNotification('Game Started', 'A new mini cactpot game has been started');
+        } catch (err) {
+            displayGenericErrorNotification();
+        }
+    }
 
     return (
         <AppShell classNames={{ main: classes.main }}>
             <Center h='100vh'>
-                <Container size='md' w='100%'>
+                <Container size='md' w='100%' px={0}>
                     <Stack align='stretch' spacing={0}>
                         <Group py='sm' px='lg' className={classes.header}>
                             <Text size='xl'> Mini Cactpot Game </Text>
-                            <Button ml='auto' size='xs' px='sm' variant='light' leftIcon={<FaTicketAlt size='16' />}> Request New Ticket </Button>
+                            <Button
+                                ml={extendedDisplay ? 'auto' : 0}
+                                size='xs'
+                                px='sm'
+                                variant='light'
+                                loading={isStartingNewGame}
+                                leftIcon={<FaTicketAlt size='16' />}
+                                onClick={() => onStartNewGame()}
+                            >
+                                <Text> Request New Ticket </Text>
+                            </Button>
                         </Group>
                         <Box py='sm' px='lg' className={classes.content}>
                             {children}

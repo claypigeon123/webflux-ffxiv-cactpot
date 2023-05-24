@@ -16,7 +16,7 @@ public class WinningsMapValidator implements ConstraintValidator<ValidWinningsMa
 
     @Override
     public boolean isValid(@NonNull Map<Integer, Integer> map, ConstraintValidatorContext context) {
-        return map.keySet().containsAll(MUST_INCLUDE);
+        return map.keySet().size() == MUST_INCLUDE.size() && map.keySet().containsAll(MUST_INCLUDE);
     }
 
 }
