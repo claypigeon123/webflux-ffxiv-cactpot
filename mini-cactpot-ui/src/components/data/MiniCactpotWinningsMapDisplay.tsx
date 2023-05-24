@@ -2,6 +2,7 @@ import { Grid, Stack, Table, Text } from '@mantine/core';
 import { FC, JSX, useMemo } from 'react';
 import { PageProps } from '../../Interfaces';
 import { appApi } from '../../redux/api/AppApi';
+import { mgpFormat } from '../../util/DomainUtils';
 import { LabelledLoadingSpinner } from '../feedback/LabelledLoadingSpinner';
 
 export const MiniCactpotWinningsMapDisplay: FC<PageProps> = ({ extendedDisplay }) => {
@@ -14,7 +15,7 @@ export const MiniCactpotWinningsMapDisplay: FC<PageProps> = ({ extendedDisplay }
         return Object.entries(winningsMap).map(([key, value]) => (
             <tr key={key}>
                 <td>{key}</td>
-                <td> {value} </td>
+                <td> {mgpFormat.format(value)} </td>
             </tr>
         ));
     }, [winningsMap]);

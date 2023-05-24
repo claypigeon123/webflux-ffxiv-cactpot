@@ -1,11 +1,10 @@
 import { AppShell, Box, Button, Center, Container, Group, Stack, Text, createStyles } from '@mantine/core';
 import { FC, ReactElement } from 'react';
-import { FaExclamation, FaTicketAlt } from 'react-icons/fa';
+import { FaTicketAlt } from 'react-icons/fa';
 import { PageProps } from '../../Interfaces';
-import { useAppDispatch } from '../../redux/util/Hooks';
 import { appApi } from '../../redux/api/AppApi';
 import { appSlice } from '../../redux/slice/AppSlice';
-import { showNotification } from '@mantine/notifications';
+import { useAppDispatch } from '../../redux/util/Hooks';
 import { displayGenericErrorNotification, displaySuccessNotification } from '../../util/NotificationUtils';
 
 
@@ -54,7 +53,7 @@ export const Layout: FC<LayoutProps> = ({ extendedDisplay = true, children }) =>
     return (
         <AppShell classNames={{ main: classes.main }}>
             <Center h='100vh'>
-                <Container size='md' w='100%' px={0}>
+                <Container size='sm' w='100%' px={0}>
                     <Stack align='stretch' spacing={0}>
                         <Group py='sm' px='lg' className={classes.header}>
                             <Text size='xl'> Mini Cactpot Game </Text>
