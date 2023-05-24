@@ -47,7 +47,7 @@ export const MiniCactpotNodeDisplay: FC<MiniCactpotNodeDisplayProps> = ({ extend
     const { primaryColor } = useMantineTheme();
     const canScratch = useMemo(() => {
         return node.number === -1 && (stage === MiniCactpotGameStage.SCRATCHING_FIRST || stage === MiniCactpotGameStage.SCRATCHING_SECOND || stage === MiniCactpotGameStage.SCRATCHING_THIRD)
-    }, [stage]);
+    }, [node.number, stage]);
     const { classes } = useStyles({ canScratch, index, hoveringSelector, stage });
 
     const label = useMemo(() => (
