@@ -1,4 +1,4 @@
-import { Grid, Stack, Table, Text } from '@mantine/core';
+import { Grid, Stack, Table, Text, createStyles } from '@mantine/core';
 import { FC, JSX, useMemo } from 'react';
 import { appApi } from '../../redux/api/AppApi';
 import { mgpFormat } from '../../util/DomainUtils';
@@ -6,23 +6,30 @@ import { LabelledLoadingSpinner } from '../feedback/LabelledLoadingSpinner';
 
 
 export interface MiniCactpotWinningsMapDisplayProps {
-
+    highlightKey?: string
 }
 
-export const MiniCactpotWinningsMapDisplay: FC<MiniCactpotWinningsMapDisplayProps> = ({ }) => {
+const useStyles = createStyles(({ primaryColor, colors, fn: { rgba } }) => ({
+    highlightedRow: {
+        background: `${rgba(colors[primaryColor][9], 0.4)}`
+    }
+}));
 
+export const MiniCactpotWinningsMapDisplay: FC<MiniCactpotWinningsMapDisplayProps> = ({ highlightKey }) => {
+
+    const { classes } = useStyles();
     const { data: winningsMap, isFetching: isFetchingWinningsMap } = appApi.useGetWinningsMapQuery({});
 
     const winningsDisplay = useMemo<JSX.Element[]>(() => {
         if (!winningsMap) return [];
 
         return Object.entries(winningsMap).map(([key, value]) => (
-            <tr key={key}>
+            <tr key={key} className={highlightKey === key ? classes.highlightedRow : ''}>
                 <td>{key}</td>
                 <td> {mgpFormat.format(value)} </td>
             </tr>
         ));
-    }, [winningsMap]);
+    }, [winningsMap, highlightKey]);
 
     if (isFetchingWinningsMap) return <LabelledLoadingSpinner text='Getting Winnings Table' />
 

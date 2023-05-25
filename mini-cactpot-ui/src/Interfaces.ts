@@ -63,6 +63,7 @@ export interface MiniCactpotTicketDto {
     updatedDate: string
     stage: MiniCactpotGameStage
     winnings?: number
+    selection: MiniCactpotSelection
     board: MiniCactpotPublicNode[]
 }
 

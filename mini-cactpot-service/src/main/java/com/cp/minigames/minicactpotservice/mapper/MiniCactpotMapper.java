@@ -119,6 +119,7 @@ public class MiniCactpotMapper {
             .board(mapPrivateBoardToPublic(aggregate.getBoard()))
             .winnings(aggregate.getWinnings())
             .stage(aggregate.getStage())
+            .selection(aggregate.getSelection())
             .createdDate(aggregate.getCreatedDate())
             .updatedDate(aggregate.getUpdatedDate())
             .build();

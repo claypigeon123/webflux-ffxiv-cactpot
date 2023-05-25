@@ -81,13 +81,13 @@ export const MiniCactpotTicket: FC<MiniCactpotTicketProps> = ({ extendedDisplay 
                         <SelectionButton type={MiniCactpotSelection.TOP_HORIZONTAL} stage={ticket.stage} setHoveringSelection={setHoveringSelector} select={onMakeSelection} />
                     </Grid.Col>
                     <Grid.Col {...br}>
-                        <MiniCactpotNodeDisplay extendedDisplay={extendedDisplay} index={0} node={ticket.board[0]} stage={ticket.stage} hoveringSelector={hoveringSelector} onValidScratch={onValidScratch} />
+                        <MiniCactpotNodeDisplay extendedDisplay={extendedDisplay} index={0} ticket={ticket} hoveringSelector={hoveringSelector} onValidScratch={onValidScratch} />
                     </Grid.Col>
                     <Grid.Col {...br}>
-                        <MiniCactpotNodeDisplay extendedDisplay={extendedDisplay} index={1} node={ticket.board[1]} stage={ticket.stage} hoveringSelector={hoveringSelector} onValidScratch={onValidScratch} />
+                        <MiniCactpotNodeDisplay extendedDisplay={extendedDisplay} index={1} ticket={ticket} hoveringSelector={hoveringSelector} onValidScratch={onValidScratch} />
                     </Grid.Col>
                     <Grid.Col {...br}>
-                        <MiniCactpotNodeDisplay extendedDisplay={extendedDisplay} index={2} node={ticket.board[2]} stage={ticket.stage} hoveringSelector={hoveringSelector} onValidScratch={onValidScratch} />
+                        <MiniCactpotNodeDisplay extendedDisplay={extendedDisplay} index={2} ticket={ticket} hoveringSelector={hoveringSelector} onValidScratch={onValidScratch} />
                     </Grid.Col>
                     <Grid.Col {...br} />
 
@@ -96,13 +96,13 @@ export const MiniCactpotTicket: FC<MiniCactpotTicketProps> = ({ extendedDisplay 
                         <SelectionButton type={MiniCactpotSelection.MIDDLE_HORIZONTAL} stage={ticket.stage} setHoveringSelection={setHoveringSelector} select={onMakeSelection} />
                     </Grid.Col>
                     <Grid.Col {...br}>
-                        <MiniCactpotNodeDisplay extendedDisplay={extendedDisplay} index={3} node={ticket.board[3]} stage={ticket.stage} hoveringSelector={hoveringSelector} onValidScratch={onValidScratch} />
+                        <MiniCactpotNodeDisplay extendedDisplay={extendedDisplay} index={3} ticket={ticket} hoveringSelector={hoveringSelector} onValidScratch={onValidScratch} />
                     </Grid.Col>
                     <Grid.Col {...br}>
-                        <MiniCactpotNodeDisplay extendedDisplay={extendedDisplay} index={4} node={ticket.board[4]} stage={ticket.stage} hoveringSelector={hoveringSelector} onValidScratch={onValidScratch} />
+                        <MiniCactpotNodeDisplay extendedDisplay={extendedDisplay} index={4} ticket={ticket} hoveringSelector={hoveringSelector} onValidScratch={onValidScratch} />
                     </Grid.Col>
                     <Grid.Col {...br}>
-                        <MiniCactpotNodeDisplay extendedDisplay={extendedDisplay} index={5} node={ticket.board[5]} stage={ticket.stage} hoveringSelector={hoveringSelector} onValidScratch={onValidScratch} />
+                        <MiniCactpotNodeDisplay extendedDisplay={extendedDisplay} index={5} ticket={ticket} hoveringSelector={hoveringSelector} onValidScratch={onValidScratch} />
                     </Grid.Col>
                     <Grid.Col {...br} />
 
@@ -111,13 +111,13 @@ export const MiniCactpotTicket: FC<MiniCactpotTicketProps> = ({ extendedDisplay 
                         <SelectionButton type={MiniCactpotSelection.BOTTOM_HORIZONTAL} stage={ticket.stage} setHoveringSelection={setHoveringSelector} select={onMakeSelection} />
                     </Grid.Col>
                     <Grid.Col {...br}>
-                        <MiniCactpotNodeDisplay extendedDisplay={extendedDisplay} index={6} node={ticket.board[6]} stage={ticket.stage} hoveringSelector={hoveringSelector} onValidScratch={onValidScratch} />
+                        <MiniCactpotNodeDisplay extendedDisplay={extendedDisplay} index={6} ticket={ticket} hoveringSelector={hoveringSelector} onValidScratch={onValidScratch} />
                     </Grid.Col>
                     <Grid.Col {...br}>
-                        <MiniCactpotNodeDisplay extendedDisplay={extendedDisplay} index={7} node={ticket.board[7]} stage={ticket.stage} hoveringSelector={hoveringSelector} onValidScratch={onValidScratch} />
+                        <MiniCactpotNodeDisplay extendedDisplay={extendedDisplay} index={7} ticket={ticket} hoveringSelector={hoveringSelector} onValidScratch={onValidScratch} />
                     </Grid.Col>
                     <Grid.Col {...br}>
-                        <MiniCactpotNodeDisplay extendedDisplay={extendedDisplay} index={8} node={ticket.board[8]} stage={ticket.stage} hoveringSelector={hoveringSelector} onValidScratch={onValidScratch} />
+                        <MiniCactpotNodeDisplay extendedDisplay={extendedDisplay} index={8} ticket={ticket} hoveringSelector={hoveringSelector} onValidScratch={onValidScratch} />
                     </Grid.Col>
                     <Grid.Col {...br} />
                 </Grid>

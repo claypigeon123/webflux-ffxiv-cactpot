@@ -1,19 +1,18 @@
 import { Avatar, Center, Text, createStyles, useMantineTheme } from '@mantine/core'
 import { FC, useMemo } from 'react'
 import { FaQuestion } from 'react-icons/fa'
-import { MiniCactpotGameStage, MiniCactpotPublicNode, MiniCactpotSelection, PageProps } from '../../Interfaces'
+import { MiniCactpotGameStage, MiniCactpotSelection, MiniCactpotTicketDto, PageProps } from '../../Interfaces'
 import { getPositionsForSelector } from '../../util/DomainUtils'
 
 
 export interface MiniCactpotNodeDisplayProps extends PageProps {
-    index: number,
-    node: MiniCactpotPublicNode
-    stage: MiniCactpotGameStage
+    ticket: MiniCactpotTicketDto
+    index: number
     hoveringSelector?: MiniCactpotSelection
     onValidScratch: (index: number) => void
 }
 
-const useStyles = createStyles(({ colors, primaryColor }, { canScratch, index, hoveringSelector, stage }: { canScratch: boolean, index: number, hoveringSelector?: MiniCactpotSelection, stage: MiniCactpotGameStage }) => {
+const useStyles = createStyles(({ colors, primaryColor }, { canScratch, index, hoveringSelector, stage, selection }: { canScratch: boolean, index: number, hoveringSelector?: MiniCactpotSelection, stage: MiniCactpotGameStage, selection: MiniCactpotSelection }) => {
     const boxShadowValue = `inset 0px 0px 0px 1.5px ${colors[primaryColor][8]}`;
 
     let containerCircle: any = {
@@ -26,8 +25,8 @@ const useStyles = createStyles(({ colors, primaryColor }, { canScratch, index, h
     }
 
     const isHoveringAffectedSelector = stage === MiniCactpotGameStage.SELECTING && getPositionsForSelector(hoveringSelector).includes(index);
-
-    if (isHoveringAffectedSelector) {
+    const hasBeenSelected = stage === MiniCactpotGameStage.DONE && getPositionsForSelector(selection).includes(index);
+    if (isHoveringAffectedSelector || hasBeenSelected) {
         containerCircle = {
             ...containerCircle,
             boxShadow: boxShadowValue
@@ -42,13 +41,18 @@ const useStyles = createStyles(({ colors, primaryColor }, { canScratch, index, h
     }
 });
 
-export const MiniCactpotNodeDisplay: FC<MiniCactpotNodeDisplayProps> = ({ extendedDisplay = true, index, node, stage, hoveringSelector, onValidScratch }) => {
+export const MiniCactpotNodeDisplay: FC<MiniCactpotNodeDisplayProps> = ({ extendedDisplay = true, ticket, index, hoveringSelector, onValidScratch }) => {
 
     const { primaryColor } = useMantineTheme();
+
+    const node = useMemo(() => {
+        return ticket.board[index];
+    }, [ticket, index]);
+
     const canScratch = useMemo(() => {
-        return node.number === -1 && (stage === MiniCactpotGameStage.SCRATCHING_FIRST || stage === MiniCactpotGameStage.SCRATCHING_SECOND || stage === MiniCactpotGameStage.SCRATCHING_THIRD)
-    }, [node.number, stage]);
-    const { classes } = useStyles({ canScratch, index, hoveringSelector, stage });
+        return node.number === -1 && (ticket.stage === MiniCactpotGameStage.SCRATCHING_FIRST || ticket.stage === MiniCactpotGameStage.SCRATCHING_SECOND || ticket.stage === MiniCactpotGameStage.SCRATCHING_THIRD)
+    }, [node.number, ticket.stage]);
+    const { classes } = useStyles({ canScratch, index, hoveringSelector, stage: ticket.stage, selection: ticket.selection });
 
     const label = useMemo(() => (
         <Text color={node.number === -1 ? 'dimmed' : primaryColor}>
@@ -69,9 +73,3 @@ export const MiniCactpotNodeDisplay: FC<MiniCactpotNodeDisplayProps> = ({ extend
         </Center>
     )
 }
-
-/*
-<Paper className={classes.node} px='md' py='xs' radius='xl'>
-                {label}
-            </Paper>
- */
