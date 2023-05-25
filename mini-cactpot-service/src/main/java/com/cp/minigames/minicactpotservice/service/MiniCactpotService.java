@@ -10,16 +10,15 @@ import com.cp.minigames.minicactpot.domain.model.request.ScratchMiniCactpotNodeR
 import com.cp.minigames.minicactpot.domain.model.response.PaginatedResponse;
 import com.cp.minigames.minicactpot.domain.model.util.AggregateConstants;
 import com.cp.minigames.minicactpot.domain.model.util.Pagination;
+import com.cp.minigames.minicactpot.domain.util.QueryParamsBuilder;
 import com.cp.minigames.minicactpotservice.config.props.MiniCactpotProperties;
 import com.cp.minigames.minicactpotservice.mapper.MiniCactpotMapper;
 import com.cp.minigames.minicactpotservice.repository.ReactiveRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -50,10 +49,10 @@ public class MiniCactpotService {
     }
 
     public Mono<MiniCactpotTicketDto> startGame(String ip) {
-        MultiValueMap<String, String> query = new LinkedMultiValueMap<>(Map.of(
-            AggregateConstants.IP, List.of(ip),
-            AggregateConstants.STAGE_NOT, List.of(MiniCactpotGameStage.DONE.name())
-        ));
+        MultiValueMap<String, String> query = QueryParamsBuilder.init()
+            .query(AggregateConstants.IP, ip)
+            .query(AggregateConstants.STAGE_NOT, MiniCactpotGameStage.DONE.name())
+            .buildMultiValueMap();
 
         return miniCactpotAggregateRepository.count(query)
             .flatMap(count -> count >= 3
