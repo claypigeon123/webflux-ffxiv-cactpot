@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { MakeMiniCactpotSelectionRequest, MakeMiniCactpotSelectionResponse, MiniCactpotTicketDto, PaginatedResponse, ScratchMiniCactpotNodeRequest, ScratchMiniCactpotNodeResponse, StartMiniCactpotGameResponse, WinningsMap } from '../../Interfaces';
+import { MakeMiniCactpotSelectionRequest, MiniCactpotTicketDto, PaginatedResponse, ScratchMiniCactpotNodeRequest, WinningsMap } from '../../Interfaces';
 import { axiosBaseQuery } from './AxiosBaseQuery';
 import { BACKEND_BASE_URI, MINI_CACTPOT_MAKE_SELECTION_ID_URI, MINI_CACTPOT_SCRATCH_ID_URI, MINI_CACTPOT_START_NEW_GAME_URI, MINI_CACTPOT_TICKETS_ID_URI, MINI_CACTPOT_TICKETS_URI, MINI_CACTPOT_WINNINGS_MAP_URI, makeUri } from './BackendURIs';
 
@@ -50,7 +50,7 @@ export const appApi = createApi({
                 url: MINI_CACTPOT_START_NEW_GAME_URI,
                 method: 'POST'
             }),
-            transformResponse: (native) => native as StartMiniCactpotGameResponse,
+            transformResponse: (native) => native as MiniCactpotTicketDto,
             invalidatesTags: (res) => res
                 ? ['mini_cactpot_tickets', { type: 'mini_cactpot_ticket', id: res.id }]
                 : []
@@ -62,7 +62,7 @@ export const appApi = createApi({
                 method: 'POST',
                 data: request
             }),
-            transformResponse: (native) => native as ScratchMiniCactpotNodeResponse,
+            transformResponse: (native) => native as MiniCactpotTicketDto,
             invalidatesTags: (res) => res
                 ? ['mini_cactpot_tickets', { type: 'mini_cactpot_ticket', id: res.id }]
                 : []
@@ -74,7 +74,7 @@ export const appApi = createApi({
                 method: 'POST',
                 data: request
             }),
-            transformResponse: (native) => native as MakeMiniCactpotSelectionResponse,
+            transformResponse: (native) => native as MiniCactpotTicketDto,
             invalidatesTags: (res) => res
                 ? ['mini_cactpot_tickets', { type: 'mini_cactpot_ticket', id: res.id }]
                 : []

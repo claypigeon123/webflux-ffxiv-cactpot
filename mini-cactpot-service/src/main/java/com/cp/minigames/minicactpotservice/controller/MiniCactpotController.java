@@ -3,10 +3,7 @@ package com.cp.minigames.minicactpotservice.controller;
 import com.cp.minigames.minicactpot.domain.model.dto.MiniCactpotTicketDto;
 import com.cp.minigames.minicactpot.domain.model.request.MakeMiniCactpotSelectionRequest;
 import com.cp.minigames.minicactpot.domain.model.request.ScratchMiniCactpotNodeRequest;
-import com.cp.minigames.minicactpot.domain.model.response.MakeMiniCactpotSelectionResponse;
 import com.cp.minigames.minicactpot.domain.model.response.PaginatedResponse;
-import com.cp.minigames.minicactpot.domain.model.response.ScratchMiniCactpotNodeResponse;
-import com.cp.minigames.minicactpot.domain.model.response.StartMiniCactpotGameResponse;
 import com.cp.minigames.minicactpotservice.service.MiniCactpotService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -51,13 +48,13 @@ public class MiniCactpotController {
     }
 
     @PostMapping(value = "/start-new-game")
-    public Mono<StartMiniCactpotGameResponse> startGame() {
+    public Mono<MiniCactpotTicketDto> startGame() {
         log.debug("Request to start new mini cactpot game");
         return miniCactpotService.startGame();
     }
 
     @PostMapping(value = "/scratch/{id}")
-    public Mono<ScratchMiniCactpotNodeResponse> scratch(
+    public Mono<MiniCactpotTicketDto> scratch(
         @PathVariable String id,
         @Valid @RequestBody ScratchMiniCactpotNodeRequest request
     ) {
@@ -66,7 +63,7 @@ public class MiniCactpotController {
     }
 
     @PostMapping(value = "/make-selection/{id}")
-    public Mono<MakeMiniCactpotSelectionResponse> makeSelection(
+    public Mono<MiniCactpotTicketDto> makeSelection(
         @PathVariable String id,
         @Valid @RequestBody MakeMiniCactpotSelectionRequest request
     ) {

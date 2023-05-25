@@ -80,22 +80,3 @@ export interface PaginatedResponse<T> {
     documents: T[]
     pagination: Pagination
 }
-
-export interface StartMiniCactpotGameResponse {
-    id: string
-    board: MiniCactpotPublicNode[]
-    stage: MiniCactpotGameStage
-}
-
-export interface ScratchMiniCactpotNodeResponse {
-    id: string
-    board: MiniCactpotPublicNode[]
-    stage: MiniCactpotGameStage
-}
-
-export interface MakeMiniCactpotSelectionResponse {
-    id: string
-    board: MiniCactpotPublicNode[]
-    stage: MiniCactpotGameStage
-    winnings: number
-}

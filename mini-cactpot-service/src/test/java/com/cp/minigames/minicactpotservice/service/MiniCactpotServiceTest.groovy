@@ -58,8 +58,7 @@ class MiniCactpotServiceTest extends Specification {
         service = new MiniCactpotService(
             repository,
             properties,
-            new MiniCactpotMapper(new RandomNumberGenerator()),
-            clock
+            new MiniCactpotMapper(properties, new RandomNumberGenerator(), clock)
         )
     }
 

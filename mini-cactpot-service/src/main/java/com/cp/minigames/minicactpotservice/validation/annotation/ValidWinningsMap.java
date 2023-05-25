@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Target( { ElementType.FIELD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidWinningsMap {
-    String message() default "winnings map must contain mappings for key 6 through 24";
+    String message() default "winnings map must contain mappings for keys 6 through 24";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
