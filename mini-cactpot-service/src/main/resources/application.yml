@@ -3,6 +3,10 @@ server:
   error:
     include-message: always
 
+logging:
+  level:
+    com.cp: DEBUG
+
 spring:
   application:
     name: mini-cactpot-service
@@ -13,7 +17,7 @@ spring:
     mongodb:
       uri: mongodb://username:password@localhost:27017/mini-cactpot-db?authSource=admin
 
-application:
+mini-cactpot:
   security:
     allowed-origins:
       - http://localhost:3000
@@ -32,29 +36,24 @@ application:
   cleanup:
     aggregate-cleanup-cron: 0 0 * ? * *
     cutoff-hours: 24
-
-logging:
-  level:
-    com.cp: DEBUG
-
-mini-cactpot:
-  winnings-map:
-    6: 10000
-    7: 36
-    8: 720
-    9: 360
-    10: 80
-    11: 252
-    12: 108
-    13: 72
-    14: 54
-    15: 180
-    16: 72
-    17: 180
-    18: 119
-    19: 36
-    20: 306
-    21: 1080
-    22: 144
-    23: 1800
-    24: 3600
+  game:
+    winnings-map:
+      6: 10000
+      7: 36
+      8: 720
+      9: 360
+      10: 80
+      11: 252
+      12: 108
+      13: 72
+      14: 54
+      15: 180
+      16: 72
+      17: 180
+      18: 119
+      19: 36
+      20: 306
+      21: 1080
+      22: 144
+      23: 1800
+      24: 3600

@@ -8,7 +8,7 @@ import org.springframework.validation.annotation.Validated;
 
 @Builder
 @Validated
-@ConfigurationProperties(prefix = "application.cleanup")
+@ConfigurationProperties(prefix = "mini-cactpot.cleanup")
 public record CleanupProperties(
     @NotBlank String aggregateCleanupCron,
     @NotNull Long cutoffHours

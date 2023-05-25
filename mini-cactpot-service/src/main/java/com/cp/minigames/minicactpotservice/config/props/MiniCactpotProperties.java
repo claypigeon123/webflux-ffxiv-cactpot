@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Builder
 @Validated
-@ConfigurationProperties(prefix = "mini-cactpot")
+@ConfigurationProperties(prefix = "mini-cactpot.game")
 public record MiniCactpotProperties(
     @ValidWinningsMap Map<Integer, Integer> winningsMap
 ) {

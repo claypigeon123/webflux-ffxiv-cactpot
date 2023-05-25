@@ -30,7 +30,7 @@ public class AggregateCleanupScheduledService {
     private final Clock clock;
 
     @Async
-    @Scheduled(cron = "${application.cleanup.aggregate-cleanup-cron}")
+    @Scheduled(cron = "${mini-cactpot.cleanup.aggregate-cleanup-cron}")
     public void performAggregateCleanup() {
         log.info("Starting mini cactpot aggregate cleanup job");
         OffsetDateTime cutoff = OffsetDateTime.now(clock).minusHours(cleanupProperties.cutoffHours());
