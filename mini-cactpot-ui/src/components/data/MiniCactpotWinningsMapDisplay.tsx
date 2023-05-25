@@ -1,11 +1,15 @@
 import { Grid, Stack, Table, Text } from '@mantine/core';
 import { FC, JSX, useMemo } from 'react';
-import { PageProps } from '../../Interfaces';
 import { appApi } from '../../redux/api/AppApi';
 import { mgpFormat } from '../../util/DomainUtils';
 import { LabelledLoadingSpinner } from '../feedback/LabelledLoadingSpinner';
 
-export const MiniCactpotWinningsMapDisplay: FC<PageProps> = ({ extendedDisplay }) => {
+
+export interface MiniCactpotWinningsMapDisplayProps {
+
+}
+
+export const MiniCactpotWinningsMapDisplay: FC<MiniCactpotWinningsMapDisplayProps> = ({ }) => {
 
     const { data: winningsMap, isFetching: isFetchingWinningsMap } = appApi.useGetWinningsMapQuery({});
 

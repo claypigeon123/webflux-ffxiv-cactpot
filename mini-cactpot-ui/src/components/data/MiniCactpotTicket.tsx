@@ -1,6 +1,6 @@
 import { Center, Grid, Overlay, Text } from '@mantine/core'
 import { FC, useState } from 'react'
-import { MiniCactpotGameStage, MiniCactpotSelection, PageProps } from '../../Interfaces'
+import { MiniCactpotGameStage, MiniCactpotSelection, MiniCactpotTicketDto, PageProps } from '../../Interfaces'
 import { appApi } from '../../redux/api/AppApi'
 import { mgpFormat } from '../../util/DomainUtils'
 import { displayGenericErrorNotification } from '../../util/NotificationUtils'
@@ -10,16 +10,16 @@ import { SelectionButton } from './SelectionButton'
 
 
 export interface MiniCactpotTicketProps extends PageProps {
-    ticketId?: string
+    ticket: MiniCactpotTicketDto
+    isLoadingTicket: boolean
 }
 
 const br = {
-    xs: 2.01
+    span: 1
 }
 
-export const MiniCactpotTicket: FC<MiniCactpotTicketProps> = ({ extendedDisplay = true, ticketId }) => {
+export const MiniCactpotTicket: FC<MiniCactpotTicketProps> = ({ extendedDisplay = true, ticket, isLoadingTicket }) => {
 
-    const { data: ticket, isLoading: isLoadingTicket } = appApi.useGetTicketQuery({ id: ticketId! }, { skip: !ticketId });
     const [scratch] = appApi.useScratchMutation();
     const [makeSelection] = appApi.useMakeSelectionMutation();
 
@@ -48,7 +48,7 @@ export const MiniCactpotTicket: FC<MiniCactpotTicketProps> = ({ extendedDisplay 
 
     if (isLoadingTicket) return <LabelledLoadingSpinner text='Loading ticket' />
 
-    if (!ticketId || !ticket) return <></>;
+    if (!ticket) return <></>;
 
     return (
         <>
@@ -59,7 +59,7 @@ export const MiniCactpotTicket: FC<MiniCactpotTicketProps> = ({ extendedDisplay 
                         <Text align='center' color='green' weight={600}> Won {mgpFormat.format(ticket.winnings)} MGP </Text>
                     </Overlay>
                 }
-                <Grid justify='center' mb='xl'>
+                <Grid justify='center' mb='xl' columns={5}>
                     <Grid.Col {...br}>
                         <SelectionButton type={MiniCactpotSelection.TOP_LEFT_DIAGONAL} stage={ticket.stage} setHoveringSelection={setHoveringSelector} select={onMakeSelection} />
                     </Grid.Col>
