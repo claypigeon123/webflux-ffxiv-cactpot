@@ -46,7 +46,7 @@ export const Layout: FC<LayoutProps> = ({ extendedDisplay = true, children }) =>
             dispatch(appSlice.actions.changeActiveTicket(res.id));
             displaySuccessNotification('Game Started', 'A new mini cactpot game has been started');
         } catch (err) {
-            displayGenericErrorNotification();
+            displayGenericErrorNotification(err);
         }
     }
 

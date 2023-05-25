@@ -4,7 +4,7 @@ import com.cp.minigames.minicactpot.domain.model.aggregate.MiniCactpotAggregate;
 import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotGameStage;
 import com.cp.minigames.minicactpot.domain.model.util.AggregateConstants;
 import com.cp.minigames.minicactpotservice.config.props.CleanupProperties;
-import com.cp.minigames.minicactpotservice.repository.AbstractReactiveMongoRepository;
+import com.cp.minigames.minicactpotservice.repository.ReactiveRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -25,7 +25,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AggregateCleanupScheduledService {
 
-    private final AbstractReactiveMongoRepository<MiniCactpotAggregate> miniCactpotAggregateRepository;
+    private final ReactiveRepository<MiniCactpotAggregate> miniCactpotAggregateRepository;
     private final CleanupProperties cleanupProperties;
     private final Clock clock;
 

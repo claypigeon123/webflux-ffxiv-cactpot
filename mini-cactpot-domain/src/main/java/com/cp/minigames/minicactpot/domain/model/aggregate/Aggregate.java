@@ -13,6 +13,7 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 public class Aggregate {
     protected String id;
+    protected String ip;
     protected OffsetDateTime createdDate;
     protected OffsetDateTime updatedDate;
 }

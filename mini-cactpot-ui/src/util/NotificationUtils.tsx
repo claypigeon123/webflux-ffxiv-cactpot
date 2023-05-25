@@ -11,10 +11,10 @@ export const displaySuccessNotification = (title: string, subtitle: string) => {
     });
 }
 
-export const displayGenericErrorNotification = () => {
+export const displayGenericErrorNotification = (error?: any) => {
     showNotification({
-        title: 'Error',
-        message: 'An unexpected error has occurred',
+        title: `Error ${error.status ?? ''}`,
+        message: error.data ?? 'An unexpected error has occurred',
         icon: <FaExclamation size='20' />,
         color: 'red'
     });

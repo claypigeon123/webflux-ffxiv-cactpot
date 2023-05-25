@@ -31,7 +31,7 @@ export const MiniCactpotTicket: FC<MiniCactpotTicketProps> = ({ extendedDisplay 
         try {
             await scratch({ id: ticket.id, request: { position: index + 1 } }).unwrap();
         } catch (err) {
-            displayGenericErrorNotification();
+            displayGenericErrorNotification(err);
         }
 
     }
@@ -42,7 +42,7 @@ export const MiniCactpotTicket: FC<MiniCactpotTicketProps> = ({ extendedDisplay 
         try {
             await makeSelection({ id: ticket.id, request: { selection } }).unwrap();
         } catch (err) {
-            displayGenericErrorNotification();
+            displayGenericErrorNotification(err);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.cp.minigames.minicactpotservice.controller;
 
+import com.cp.minigames.minicactpot.domain.exception.impl.IpCannotBeDetermined;
 import com.cp.minigames.minicactpot.domain.model.dto.MiniCactpotTicketDto;
 import com.cp.minigames.minicactpot.domain.model.request.MakeMiniCactpotSelectionRequest;
 import com.cp.minigames.minicactpot.domain.model.request.ScratchMiniCactpotNodeRequest;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -48,9 +50,8 @@ public class MiniCactpotController {
     }
 
     @PostMapping(value = "/start-new-game")
-    public Mono<MiniCactpotTicketDto> startGame() {
-        log.debug("Request to start new mini cactpot game");
-        return miniCactpotService.startGame();
+    public Mono<MiniCactpotTicketDto> startGame(ServerWebExchange exchange) {
+        return extractIp(exchange).flatMap(miniCactpotService::startGame);
     }
 
     @PostMapping(value = "/scratch/{id}")
@@ -69,5 +70,13 @@ public class MiniCactpotController {
     ) {
         log.debug("Request to select {} on mini cactpot ticket ID {}", request.selection(), id);
         return miniCactpotService.makeSelection(id, request);
+    }
+
+    // --
+
+    private Mono<String> extractIp(ServerWebExchange exchange) {
+        return Mono.justOrEmpty(exchange.getRequest().getRemoteAddress())
+            .mapNotNull(remote -> remote.getAddress().getHostAddress())
+            .switchIfEmpty(Mono.error(IpCannotBeDetermined::new));
     }
 }

@@ -28,18 +28,19 @@ public class MiniCactpotMapper {
     private final RandomNumberGenerator rng;
     private final Clock clock;
 
-    public Mono<MiniCactpotAggregate> initializeNewGame() {
+    public Mono<MiniCactpotAggregate> initializeNewGame(String ip) {
         List<MiniCactpotNode> board = initializeNodes();
         OffsetDateTime now = OffsetDateTime.now(clock);
 
         return Mono.just(MiniCactpotAggregate.builder()
             .id(UUID.randomUUID().toString())
+            .ip(ip)
+            .createdDate(now)
+            .updatedDate(now)
             .board(board)
             .selection(MiniCactpotSelection.NONE)
             .stage(MiniCactpotGameStage.SCRATCHING_FIRST)
             .winnings(null)
-            .createdDate(now)
-            .updatedDate(now)
             .build()
         );
     }

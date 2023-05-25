@@ -1,27 +1,32 @@
 package com.cp.minigames.minicactpotservice.service;
 
+import com.cp.minigames.minicactpot.domain.exception.impl.GameAlreadyInProgress;
 import com.cp.minigames.minicactpot.domain.exception.impl.TicketNotFoundException;
 import com.cp.minigames.minicactpot.domain.model.aggregate.MiniCactpotAggregate;
+import com.cp.minigames.minicactpot.domain.model.attributes.MiniCactpotGameStage;
 import com.cp.minigames.minicactpot.domain.model.dto.MiniCactpotTicketDto;
 import com.cp.minigames.minicactpot.domain.model.request.MakeMiniCactpotSelectionRequest;
 import com.cp.minigames.minicactpot.domain.model.request.ScratchMiniCactpotNodeRequest;
 import com.cp.minigames.minicactpot.domain.model.response.PaginatedResponse;
+import com.cp.minigames.minicactpot.domain.model.util.AggregateConstants;
 import com.cp.minigames.minicactpot.domain.model.util.Pagination;
 import com.cp.minigames.minicactpotservice.config.props.MiniCactpotProperties;
 import com.cp.minigames.minicactpotservice.mapper.MiniCactpotMapper;
-import com.cp.minigames.minicactpotservice.repository.AbstractReactiveMongoRepository;
+import com.cp.minigames.minicactpotservice.repository.ReactiveRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class MiniCactpotService {
 
-    private final AbstractReactiveMongoRepository<MiniCactpotAggregate> miniCactpotAggregateRepository;
+    private final ReactiveRepository<MiniCactpotAggregate> miniCactpotAggregateRepository;
     private final MiniCactpotProperties miniCactpotProperties;
     private final MiniCactpotMapper miniCactpotMapper;
 
@@ -44,8 +49,18 @@ public class MiniCactpotService {
             .map(miniCactpotMapper::mapDtoFromAggregate);
     }
 
-    public Mono<MiniCactpotTicketDto> startGame() {
-        return miniCactpotMapper.initializeNewGame()
+    public Mono<MiniCactpotTicketDto> startGame(String ip) {
+        MultiValueMap<String, String> query = new LinkedMultiValueMap<>(Map.of(
+            AggregateConstants.IP, List.of(ip),
+            AggregateConstants.STAGE_NOT, List.of(MiniCactpotGameStage.DONE.name())
+        ));
+
+        return miniCactpotAggregateRepository.count(query)
+            .flatMap(count -> count >= 3
+                ? Mono.error(GameAlreadyInProgress::new)
+                : Mono.empty()
+            )
+            .then(Mono.defer(() -> miniCactpotMapper.initializeNewGame(ip)))
             .flatMap(miniCactpotAggregateRepository::insert)
             .map(miniCactpotMapper::mapDtoFromAggregate);
     }

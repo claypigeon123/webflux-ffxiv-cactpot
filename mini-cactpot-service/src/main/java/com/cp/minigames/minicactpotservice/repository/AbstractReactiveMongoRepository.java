@@ -87,6 +87,7 @@ public abstract class AbstractReactiveMongoRepository<T extends Aggregate> imple
 
     protected Query buildQuery(MultiValueMap<String, String> queryMap) {
         return MongoQueryBuilder.init()
+            .withEqualsMatch(IP, queryMap.getFirst(IP))
             .withDateFrom(CREATED_DATE, queryMap.getFirst(CREATED_DATE_FROM))
             .withDateTo(CREATED_DATE, queryMap.getFirst(CREATED_DATE_TO))
             .withDateFrom(UPDATED_DATE, queryMap.getFirst(UPDATED_DATE_FROM))
