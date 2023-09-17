@@ -34,6 +34,17 @@
         <module>mini-cactpot-service</module>
     </modules>
 
+    <distributionManagement>
+        <repository>
+            <id>pigeon-nexus-releases</id>
+            <url>https://build.cp-sys.hu/nexus/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>pigeon-nexus-snapshots</id>
+            <url>https://build.cp-sys.hu/nexus/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
