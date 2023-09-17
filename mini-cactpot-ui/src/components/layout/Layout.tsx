@@ -1,11 +1,12 @@
 import { AppShell, Box, Button, Center, Container, Group, Stack, Text, createStyles } from '@mantine/core';
 import { FC, ReactElement } from 'react';
-import { FaTicketAlt } from 'react-icons/fa';
+import { FaBoxOpen, FaTicketAlt } from 'react-icons/fa';
 import { PageProps } from '../../Interfaces';
 import { appApi } from '../../redux/api/AppApi';
 import { appSlice } from '../../redux/slice/AppSlice';
 import { useAppDispatch } from '../../redux/util/Hooks';
 import { displayGenericErrorNotification, displaySuccessNotification } from '../../util/NotificationUtils';
+import { openTicketChooserModal } from '../modals/TicketChooserModal';
 
 
 export interface LayoutProps extends PageProps {
@@ -62,11 +63,20 @@ export const Layout: FC<LayoutProps> = ({ extendedDisplay = true, children }) =>
                                 size='xs'
                                 px='sm'
                                 variant='light'
+                                leftIcon={<FaBoxOpen size='16' />}
+                                onClick={() => openTicketChooserModal()}
+                            >
+                                <Text> My Tickets </Text>
+                            </Button>
+                            <Button
+                                size='xs'
+                                px='sm'
+                                variant='light'
                                 loading={isStartingNewGame}
                                 leftIcon={<FaTicketAlt size='16' />}
                                 onClick={() => onStartNewGame()}
                             >
-                                <Text> Request New Ticket </Text>
+                                <Text> New Ticket </Text>
                             </Button>
                         </Group>
                         <Box py='sm' px='lg' className={classes.content}>
