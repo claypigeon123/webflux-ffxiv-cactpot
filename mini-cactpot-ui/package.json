@@ -5,6 +5,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite --port 3000 --host",
+        "test": "echo soon",
         "build": "tsc && vite build",
         "preview": "vite preview --port 3000 --host"
     },
