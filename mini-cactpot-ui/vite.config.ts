@@ -15,8 +15,6 @@ export default defineConfig({
                         "@mantine/core",
                         "@mantine/modals",
                         "@mantine/hooks",
-                        "@mantine/form",
-                        "@mantine/dropzone",
                         "@mantine/notifications"
                     ]
                 }
