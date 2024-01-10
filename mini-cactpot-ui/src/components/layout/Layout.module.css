@@ -1,0 +1,15 @@
+.main {
+    background: linear-gradient(to right top, #1c1f59, #162052, #12204b, #102043, #111f3b, #171c34, #1a192d, #1b1626, #1d121e, #1b0d16, #18090e, #120505);
+}
+
+.header {
+    background: var(--mantine-color-dark-8);
+    border: rem(1px) solid var(--mantine-color-dark-6);
+}
+
+.content {
+    background: var(--mantine-color-dark-9);
+    border-left: rem(1px) solid var(--mantine-color-dark-6);
+    border-bottom: rem(1px) solid var(--mantine-color-dark-6);
+    border-right: rem(1px) solid var(--mantine-color-dark-6);
+}

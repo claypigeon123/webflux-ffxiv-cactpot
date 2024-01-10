@@ -11,7 +11,7 @@ export const openTicketChooserModal = () => {
     openContextModal({
         modal: TICKET_CHOOSER_MODAL_NAME,
         title: (
-            <Group spacing={rem(10)}>
+            <Group gap={rem(10)}>
                 <FaBoxOpen size='24' style={{ verticalAlign: 'middle' }} />
                 <Title order={4}> My Tickets </Title>
             </Group>
@@ -36,16 +36,16 @@ export const TicketChooserModal = ({ context: ctx, id, innerProps: { } }: Contex
     }, [ticketsResponse]);
 
     if (isFetchingTickets) return (
-        <Stack align='center' spacing={rem(5)}>
+        <Stack align='center' gap={rem(5)}>
             <Loader />
-            <Text color={primaryColor} weight={500}> Loading tickets </Text>
+            <Text c={primaryColor} fw={500}> Loading tickets </Text>
         </Stack>
     );
 
     if (!ticketsResponse || ticketsResponse.documents.length < 1) return (
         <Stack align='center'>
-            <Text color='dimmed'> No tickets found. </Text>
-            <Button variant='light' px='sm' leftIcon={<FaSync size='18' />} onClick={refetchTickets}> Refresh </Button>
+            <Text c='dimmed'> No tickets found. </Text>
+            <Button variant='light' px='sm' leftSection={<FaSync size='18' />} onClick={refetchTickets}> Refresh </Button>
         </Stack>
     );
 

@@ -6,9 +6,12 @@ import { createRoot } from 'react-dom/client';
 import { Provider as ReduxProvider } from 'react-redux';
 import { App } from './App';
 import { makeStore } from './redux/util/Store';
+import { TICKET_CHOOSER_MODAL_NAME, TicketChooserModal } from './components/modals/TicketChooserModal';
 
 import './assets/styles/global.css';
-import { TICKET_CHOOSER_MODAL_NAME, TicketChooserModal } from './components/modals/TicketChooserModal';
+import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
+
 
 const store = makeStore();
 
@@ -21,7 +24,6 @@ createRoot(document.getElementById('root') as HTMLElement).render(
         <ReduxProvider store={store}>
             <MantineProvider
                 theme={{
-                    colorScheme: 'dark',
                     primaryColor: 'violet',
                     fontFamily: 'Poppins, sans-serif',
                     fontFamilyMonospace: 'consolas',
@@ -30,8 +32,6 @@ createRoot(document.getElementById('root') as HTMLElement).render(
                     },
                     cursorType: 'pointer'
                 }}
-                withGlobalStyles
-                withNormalizeCSS
             >
                 <ModalsProvider
                     modals={modals}

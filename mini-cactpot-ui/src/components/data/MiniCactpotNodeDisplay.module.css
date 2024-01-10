@@ -1,0 +1,4 @@
+.containerCircle:hover {
+    transform: scale(1.02);
+    box-shadow: inset 0px 0px 0px rem(1.5px) var(--mantine-primary-color-8);
+}

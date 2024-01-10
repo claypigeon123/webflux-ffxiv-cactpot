@@ -52,11 +52,11 @@ export const MiniCactpotTicket: FC<MiniCactpotTicketProps> = ({ extendedDisplay 
 
     return (
         <>
-            <Text align='center' size='lg'> Ticket </Text>
+            <Text ta='center' size='lg'> Ticket </Text>
             <Center style={{ position: 'relative' }}>
                 {ticket.stage === MiniCactpotGameStage.DONE && ticket.winnings &&
-                    <Overlay center opacity={0.4} blur={1} radius='lg'>
-                        <Text align='center' color='green' weight={600}> Won {mgpFormat.format(ticket.winnings)} MGP </Text>
+                    <Overlay center blur={2} radius='lg'>
+                        <Text ta='center' c='green' fw={600}> Won {mgpFormat.format(ticket.winnings)} MGP </Text>
                     </Overlay>
                 }
                 <Grid justify='center' mb='xl' columns={5}>

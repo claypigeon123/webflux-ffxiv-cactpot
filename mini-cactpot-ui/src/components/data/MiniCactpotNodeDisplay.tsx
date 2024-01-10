@@ -1,8 +1,9 @@
-import { Avatar, Center, Text, createStyles, useMantineTheme } from '@mantine/core'
+import { Avatar, Center, MantineStyleProp, MantineTheme, Text, useMantineTheme } from '@mantine/core'
 import { FC, useMemo } from 'react'
 import { FaQuestion } from 'react-icons/fa'
 import { MiniCactpotGameStage, MiniCactpotSelection, MiniCactpotTicketDto, PageProps } from '../../Interfaces'
 import { getPositionsForSelector } from '../../util/DomainUtils'
+import classes from './MiniCactpotNodeDisplay.module.css';
 
 
 export interface MiniCactpotNodeDisplayProps extends PageProps {
@@ -12,16 +13,12 @@ export interface MiniCactpotNodeDisplayProps extends PageProps {
     onValidScratch: (index: number) => void
 }
 
-const useStyles = createStyles(({ colors, primaryColor }, { canScratch, index, hoveringSelector, stage, selection }: { canScratch: boolean, index: number, hoveringSelector?: MiniCactpotSelection, stage: MiniCactpotGameStage, selection: MiniCactpotSelection }) => {
+const useStyles = ({ colors, primaryColor }: MantineTheme, { canScratch, index, hoveringSelector, stage, selection }: { canScratch: boolean, index: number, hoveringSelector?: MiniCactpotSelection, stage: MiniCactpotGameStage, selection: MiniCactpotSelection }) => {
     const boxShadowValue = `inset 0px 0px 0px 1.5px ${colors[primaryColor][8]}`;
 
-    let containerCircle: any = {
+    let containerCircle: MantineStyleProp = {
         cursor: canScratch ? 'pointer' : 'not-allowed',
-        transition: 'all 200ms ease',
-        '&:hover': {
-            transform: canScratch ? 'scale(1.02)' : 'none',
-            boxShadow: canScratch ? boxShadowValue : 'none'
-        }
+        transition: 'all 200ms ease'
     }
 
     const isHoveringAffectedSelector = stage === MiniCactpotGameStage.SELECTING && getPositionsForSelector(hoveringSelector).includes(index);
@@ -34,16 +31,18 @@ const useStyles = createStyles(({ colors, primaryColor }, { canScratch, index, h
     }
 
     return {
-        containerCircle,
-        icon: {
-            verticalAlign: 'middle'
+        styles: {
+            containerCircle,
+            icon: {
+                verticalAlign: 'middle'
+            }
         }
     }
-});
+};
 
 export const MiniCactpotNodeDisplay: FC<MiniCactpotNodeDisplayProps> = ({ extendedDisplay = true, ticket, index, hoveringSelector, onValidScratch }) => {
 
-    const { primaryColor } = useMantineTheme();
+    const { colors, primaryColor, ...others } = useMantineTheme();
 
     const node = useMemo(() => {
         return ticket.board[index];
@@ -52,11 +51,12 @@ export const MiniCactpotNodeDisplay: FC<MiniCactpotNodeDisplayProps> = ({ extend
     const canScratch = useMemo(() => {
         return node.number === -1 && (ticket.stage === MiniCactpotGameStage.SCRATCHING_FIRST || ticket.stage === MiniCactpotGameStage.SCRATCHING_SECOND || ticket.stage === MiniCactpotGameStage.SCRATCHING_THIRD)
     }, [node.number, ticket.stage]);
-    const { classes } = useStyles({ canScratch, index, hoveringSelector, stage: ticket.stage, selection: ticket.selection });
+
+    const { styles } = useStyles({ colors, primaryColor, ...others }, { canScratch, index, hoveringSelector, stage: ticket.stage, selection: ticket.selection });
 
     const label = useMemo(() => (
-        <Text color={node.number === -1 ? 'dimmed' : primaryColor}>
-            {node.number === -1 ? <FaQuestion size='18' className={classes.icon} /> : node.number}
+        <Text c={node.number === -1 ? 'dimmed' : primaryColor}>
+            {node.number === -1 ? <FaQuestion size='18' style={styles.icon} /> : node.number}
         </Text>
     ), [node]);
 
@@ -67,7 +67,7 @@ export const MiniCactpotNodeDisplay: FC<MiniCactpotNodeDisplayProps> = ({ extend
 
     return (
         <Center>
-            <Avatar className={classes.containerCircle} onClick={() => onScratch()} radius='xl' size={extendedDisplay ? 'lg' : 'md'}>
+            <Avatar style={styles.containerCircle} className={canScratch ? classes.containerCircle : ''} onClick={() => onScratch()} radius='xl' size={extendedDisplay ? 'lg' : 'md'}>
                 {label}
             </Avatar>
         </Center>

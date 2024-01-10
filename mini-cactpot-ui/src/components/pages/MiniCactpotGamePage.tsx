@@ -16,7 +16,7 @@ export const MiniCactpotGamePage: FC<PageProps> = ({ extendedDisplay = true }) =
     const ticketDisplay = useMemo(() => {
         if (!activeTicketId || !activeTicket) return (
             <Center h='100%'>
-                <Text align='center' color='dimmed'> No active ticket yet </Text>
+                <Text ta='center' c='dimmed'> No active ticket yet </Text>
             </Center>
         );
 
@@ -24,7 +24,7 @@ export const MiniCactpotGamePage: FC<PageProps> = ({ extendedDisplay = true }) =
     }, [extendedDisplay, activeTicketId, activeTicket, isLoadingTicket]);
 
     const highlightKey = useMemo<string | undefined>(() => {
-        if (!activeTicket || !activeTicket.selection || activeTicket.selection === MiniCactpotSelection.NONE) return;
+        if (!activeTicket?.selection || activeTicket.selection === MiniCactpotSelection.NONE) return;
 
         const positions = getPositionsForSelector(activeTicket.selection);
         const key = positions.reduce((left, right) => left + activeTicket.board[right].number, 0);
@@ -34,10 +34,10 @@ export const MiniCactpotGamePage: FC<PageProps> = ({ extendedDisplay = true }) =
 
     return (
         <Grid>
-            <Grid.Col xs={6}>
+            <Grid.Col span={{ xs: 6 }}>
                 {ticketDisplay}
             </Grid.Col>
-            <Grid.Col xs={6}>
+            <Grid.Col span={{ xs: 6 }}>
                 <MiniCactpotWinningsMapDisplay highlightKey={highlightKey} />
             </Grid.Col>
         </Grid>

@@ -1,5 +1,5 @@
-import { combineReducers, configureStore, PreloadedState } from "@reduxjs/toolkit";
-import { setupListeners } from "@reduxjs/toolkit/dist/query";
+import { combineReducers, configureStore, PreloadedStateShapeFromReducersMapObject } from "@reduxjs/toolkit";
+import { setupListeners } from "@reduxjs/toolkit/query";
 import { appApi } from "../api/AppApi";
 import { appSlice } from "../slice/AppSlice";
 
@@ -8,7 +8,7 @@ const rootReducer = combineReducers({
     [appApi.reducerPath]: appApi.reducer
 });
 
-export const makeStore = (preloadedState?: PreloadedState<typeof rootReducer>) => {
+export const makeStore = (preloadedState?: PreloadedStateShapeFromReducersMapObject<typeof rootReducer>) => {
     const store = configureStore({
         reducer: rootReducer,
         preloadedState,

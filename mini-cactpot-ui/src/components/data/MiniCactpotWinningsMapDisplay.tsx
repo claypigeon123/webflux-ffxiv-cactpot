@@ -1,33 +1,27 @@
-import { Grid, Stack, Table, Text, createStyles } from '@mantine/core';
+import { Grid, Stack, Table, Text } from '@mantine/core';
 import { FC, JSX, useMemo } from 'react';
 import { appApi } from '../../redux/api/AppApi';
 import { mgpFormat } from '../../util/DomainUtils';
 import { LabelledLoadingSpinner } from '../feedback/LabelledLoadingSpinner';
+import classes from './MiniCactpotWinningsMapDisplay.module.css';
 
 
 export interface MiniCactpotWinningsMapDisplayProps {
     highlightKey?: string
 }
 
-const useStyles = createStyles(({ primaryColor, colors, fn: { rgba } }) => ({
-    highlightedRow: {
-        background: `${rgba(colors[primaryColor][9], 0.4)}`
-    }
-}));
-
 export const MiniCactpotWinningsMapDisplay: FC<MiniCactpotWinningsMapDisplayProps> = ({ highlightKey }) => {
 
-    const { classes } = useStyles();
     const { data: winningsMap, isFetching: isFetchingWinningsMap } = appApi.useGetWinningsMapQuery({});
 
     const winningsDisplay = useMemo<JSX.Element[]>(() => {
         if (!winningsMap) return [];
 
         return Object.entries(winningsMap).map(([key, value]) => (
-            <tr key={key} className={highlightKey === key ? classes.highlightedRow : ''}>
-                <td>{key}</td>
-                <td> {mgpFormat.format(value)} </td>
-            </tr>
+            <Table.Tr key={key} className={highlightKey === key ? classes.highlightedRow : ''}>
+                <Table.Td>{key}</Table.Td>
+                <Table.Td> {mgpFormat.format(value)} </Table.Td>
+            </Table.Tr>
         ));
     }, [winningsMap, highlightKey]);
 
@@ -35,32 +29,32 @@ export const MiniCactpotWinningsMapDisplay: FC<MiniCactpotWinningsMapDisplayProp
 
     return (
         <Stack>
-            <Text align='center' size='lg'> Payout </Text>
+            <Text ta='center' size='lg'> Payout </Text>
             <Grid gutter='xs'>
                 <Grid.Col span={6}>
-                    <Table fontSize='xs' verticalSpacing={0}>
-                        <thead>
-                            <tr>
-                                <th> Sum </th>
-                                <th> MGP </th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <Table fz='xs' verticalSpacing={0}>
+                        <Table.Thead>
+                            <Table.Tr>
+                                <Table.Th> Sum </Table.Th>
+                                <Table.Th> MGP </Table.Th>
+                            </Table.Tr>
+                        </Table.Thead>
+                        <Table.Tbody>
                             {winningsDisplay.slice(0, 10)}
-                        </tbody>
+                        </Table.Tbody>
                     </Table>
                 </Grid.Col>
                 <Grid.Col span={6}>
-                    <Table fontSize='xs' verticalSpacing={0}>
-                        <thead>
-                            <tr>
-                                <th> Sum </th>
-                                <th> MGP </th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <Table fz='xs' verticalSpacing={0}>
+                        <Table.Thead>
+                            <Table.Tr>
+                                <Table.Th> Sum </Table.Th>
+                                <Table.Th> MGP </Table.Th>
+                            </Table.Tr>
+                        </Table.Thead>
+                        <Table.Tbody>
                             {winningsDisplay.slice(10)}
-                        </tbody>
+                        </Table.Tbody>
                     </Table>
                 </Grid.Col>
             </Grid>
