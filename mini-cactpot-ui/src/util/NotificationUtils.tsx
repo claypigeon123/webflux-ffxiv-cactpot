@@ -1,5 +1,5 @@
 import { showNotification } from "@mantine/notifications";
-import { FaCheck, FaExclamation } from "react-icons/fa";
+import { FaCheck, FaExclamation } from "react-icons/fa6";
 
 
 export const displaySuccessNotification = (title: string, subtitle: string) => {

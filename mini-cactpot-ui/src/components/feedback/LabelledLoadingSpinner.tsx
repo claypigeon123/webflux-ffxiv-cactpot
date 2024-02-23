@@ -1,6 +1,6 @@
-import { Avatar, Loader, Stack, Text, useMantineTheme } from "@mantine/core"
+import { Avatar, Loader, Stack, Text, useMantineTheme } from "@mantine/core";
 import { FC } from "react";
-import { FaCheck, FaExclamation } from "react-icons/fa";
+import { FaCheck, FaExclamation } from "react-icons/fa6";
 
 export interface LabelledLoadingSpinnerProps {
     text?: string,

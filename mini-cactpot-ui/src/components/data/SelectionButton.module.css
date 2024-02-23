@@ -1,3 +1,29 @@
+.container {
+    transition: all 200ms ease;
+}
+
+.icon {
+    vertical-align: middle;
+}
+
+.containerCircle {
+    transition: all 200ms ease;
+}
+
+.selectableContainerCircle {
+    cursor: pointer;
+}
+
+.notSelectableContainerCircle {
+    cursor: pointer;
+    filter: blur(rem(1px));
+    opacity: 20%;
+}
+
 .containerCircle:hover {
     background-color: var(--mantine-primary-color-9);
+}
+
+.notSelectableContainerCircle:hover {
+    background-color: inherit;
 }

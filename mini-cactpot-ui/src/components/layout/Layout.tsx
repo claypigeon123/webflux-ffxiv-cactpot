@@ -1,6 +1,6 @@
 import { AppShell, Box, Button, Center, Container, Group, Stack, Text } from '@mantine/core';
 import { FC, ReactElement } from 'react';
-import { FaBoxOpen, FaTicketAlt } from 'react-icons/fa';
+import { FaBoxOpen, FaTicket } from 'react-icons/fa6';
 import { PageProps } from '../../Interfaces';
 import { appApi } from '../../redux/api/AppApi';
 import { appSlice } from '../../redux/slice/AppSlice';
@@ -53,7 +53,7 @@ export const Layout: FC<LayoutProps> = ({ extendedDisplay = true, children }) =>
                                     px='sm'
                                     variant='light'
                                     loading={isStartingNewGame}
-                                    leftSection={<FaTicketAlt size='16' />}
+                                    leftSection={<FaTicket size='16' />}
                                     onClick={() => onStartNewGame()}
                                 >
                                     New Ticket

@@ -1,7 +1,7 @@
 import { Button, Group, Loader, Stack, Text, Title, rem, useMantineTheme } from "@mantine/core";
 import { ContextModalProps, openContextModal } from "@mantine/modals";
 import { useMemo } from "react";
-import { FaBoxOpen, FaSync } from "react-icons/fa";
+import { FaBoxOpen, FaRotate } from "react-icons/fa6";
 import { appApi } from "../../redux/api/AppApi";
 
 
@@ -45,7 +45,7 @@ export const TicketChooserModal = ({ context: ctx, id, innerProps: { } }: Contex
     if (!ticketsResponse || ticketsResponse.documents.length < 1) return (
         <Stack align='center'>
             <Text c='dimmed'> No tickets found. </Text>
-            <Button variant='light' px='sm' leftSection={<FaSync size='18' />} onClick={refetchTickets}> Refresh </Button>
+            <Button variant='light' px='sm' leftSection={<FaRotate size='18' />} onClick={refetchTickets}> Refresh </Button>
         </Stack>
     );
 

@@ -1,9 +1,9 @@
 import { Avatar, Center, MantineStyleProp, MantineTheme, Text, useMantineTheme } from '@mantine/core'
 import { FC, useMemo } from 'react'
-import { FaQuestion } from 'react-icons/fa'
+import { FaQuestion } from 'react-icons/fa6'
 import { MiniCactpotGameStage, MiniCactpotSelection, MiniCactpotTicketDto, PageProps } from '../../Interfaces'
 import { getPositionsForSelector } from '../../util/DomainUtils'
-import classes from './MiniCactpotNodeDisplay.module.css';
+import classes from './MiniCactpotNodeDisplay.module.css'
 
 
 export interface MiniCactpotNodeDisplayProps extends PageProps {
