@@ -1,2 +1,4 @@
 .idea
 *.iml
+.effective-pom.xml
+.flattened-pom.xml
