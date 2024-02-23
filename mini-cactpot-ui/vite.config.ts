@@ -8,9 +8,6 @@ export default defineConfig({
         rollupOptions: {
             output: {
                 manualChunks: {
-                    e: [
-                        "@emotion/react"
-                    ],
                     m: [
                         "@mantine/core",
                         "@mantine/modals",
