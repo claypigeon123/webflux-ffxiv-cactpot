@@ -12,7 +12,7 @@ export interface MiniCactpotWinningsMapDisplayProps {
 
 export const MiniCactpotWinningsMapDisplay: FC<MiniCactpotWinningsMapDisplayProps> = ({ highlightKey }) => {
 
-    const { data: winningsMap, isFetching: isFetchingWinningsMap } = appApi.useGetWinningsMapQuery({});
+    const { data: winningsMap, isFetching: isFetchingWinningsMap, isError: isErrorFetchingWinningsMap } = appApi.useGetWinningsMapQuery({});
 
     const winningsDisplay = useMemo<JSX.Element[]>(() => {
         if (!winningsMap) return [];
@@ -25,7 +25,9 @@ export const MiniCactpotWinningsMapDisplay: FC<MiniCactpotWinningsMapDisplayProp
         ));
     }, [winningsMap, highlightKey]);
 
-    if (isFetchingWinningsMap) return <LabelledLoadingSpinner text='Getting Winnings Table' />
+    if (isFetchingWinningsMap) return <LabelledLoadingSpinner text='Loading winnings table' />
+
+    if (isErrorFetchingWinningsMap) return <LabelledLoadingSpinner error text='Could not fetch winnings table' />
 
     return (
         <Stack>

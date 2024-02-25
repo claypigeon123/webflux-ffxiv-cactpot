@@ -1,28 +1,13 @@
-import { Button, Group, Loader, Stack, Text, Title, rem, useMantineTheme } from "@mantine/core";
-import { ContextModalProps, openContextModal } from "@mantine/modals";
+import { Button, Group, Stack, Text } from "@mantine/core";
+import { ContextModalProps } from "@mantine/modals";
 import { useMemo } from "react";
-import { FaBoxOpen, FaRotate } from "react-icons/fa6";
+import { FaRotate } from "react-icons/fa6";
 import { appApi } from "../../redux/api/AppApi";
+import { LabelledLoadingSpinner } from "../feedback/LabelledLoadingSpinner";
 
-
-export const TICKET_CHOOSER_MODAL_NAME = 'ticketChooserModal';
-
-export const openTicketChooserModal = () => {
-    openContextModal({
-        modal: TICKET_CHOOSER_MODAL_NAME,
-        title: (
-            <Group gap={rem(10)}>
-                <FaBoxOpen size='24' style={{ verticalAlign: 'middle' }} />
-                <Title order={4}> My Tickets </Title>
-            </Group>
-        ),
-        innerProps: {}
-    });
-}
 
 export const TicketChooserModal = ({ context: ctx, id, innerProps: { } }: ContextModalProps<{}>) => {
 
-    const { primaryColor } = useMantineTheme();
     const { data: ticketsResponse, isFetching: isFetchingTickets, refetch: refetchTickets } = appApi.useQueryTicketsQuery({});
 
     const ticketsDisplay = useMemo(() => {
@@ -36,15 +21,12 @@ export const TicketChooserModal = ({ context: ctx, id, innerProps: { } }: Contex
     }, [ticketsResponse]);
 
     if (isFetchingTickets) return (
-        <Stack align='center' gap={rem(5)}>
-            <Loader />
-            <Text c={primaryColor} fw={500}> Loading tickets </Text>
-        </Stack>
+        <LabelledLoadingSpinner text='Loading tickets' />
     );
 
     if (!ticketsResponse || ticketsResponse.documents.length < 1) return (
         <Stack align='center'>
-            <Text c='dimmed'> No tickets found. </Text>
+            <LabelledLoadingSpinner error text='No tickets found' />
             <Button variant='light' px='sm' leftSection={<FaRotate size='18' />} onClick={refetchTickets}> Refresh </Button>
         </Stack>
     );

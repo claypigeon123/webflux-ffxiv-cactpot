@@ -14,9 +14,7 @@ export interface SelectionButtonProps {
 
 export const SelectionButton: FC<SelectionButtonProps> = ({ type, stage, setHoveringSelection, select }) => {
 
-    const canSelect = useMemo(() => {
-        return stage === MiniCactpotGameStage.SELECTING
-    }, [stage]);
+    const canSelect = useMemo(() => stage === MiniCactpotGameStage.SELECTING, [stage]);
 
     const icon = useMemo(() => {
         switch (type) {

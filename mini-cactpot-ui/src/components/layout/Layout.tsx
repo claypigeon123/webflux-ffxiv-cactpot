@@ -6,7 +6,7 @@ import { appApi } from '../../redux/api/AppApi';
 import { appSlice } from '../../redux/slice/AppSlice';
 import { useAppDispatch } from '../../redux/util/Hooks';
 import { displayGenericErrorNotification, displaySuccessNotification } from '../../util/NotificationUtils';
-import { openTicketChooserModal } from '../modals/TicketChooserModal';
+import { openTicketChooserModal } from '../modals/_modals';
 import classes from './Layout.module.css';
 
 
