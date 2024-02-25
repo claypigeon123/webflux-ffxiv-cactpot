@@ -10,7 +10,7 @@ export interface LabelledLoadingSpinnerProps {
 
 export const LabelledLoadingSpinner: FC<LabelledLoadingSpinnerProps> = ({ text = "Loading", success = false, error = false }) => {
 
-    const { primaryColor, colors } = useMantineTheme();
+    const { primaryColor } = useMantineTheme();
 
     if (error) return (
         <Stack align='center' gap={0}>
